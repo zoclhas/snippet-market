@@ -11,6 +11,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const HEADER_HEIGHT = 60;
 
@@ -115,18 +116,18 @@ interface userInfoProps {
 
 export function Navbar({ links }: NavbarProps, userInfo?: userInfoProps) {
     const [opened, { toggle, close }] = useDisclosure(false);
-    const [active, setActive] = useState(links[0].link);
     const { classes, cx } = useStyles();
+
+    const router = useRouter();
 
     const items = links.map((link) => (
         <Link
             key={link.label}
             href={link.link}
             className={cx(classes.link, {
-                [classes.linkActive]: active === link.link,
+                [classes.linkActive]: router.pathname === link.link,
             })}
             onClick={(event) => {
-                setActive(link.link);
                 close();
             }}
         >

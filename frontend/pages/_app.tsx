@@ -3,6 +3,9 @@ import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 
+import { Provider } from "react-redux";
+import store from "../store";
+
 import { Navbar } from "@/components/header/header";
 
 export default function App(props: AppProps) {
@@ -28,19 +31,20 @@ export default function App(props: AppProps) {
                     content="minimum-scale=1, initial-scale=1, width=device-width"
                 />
             </Head>
-
-            <MantineProvider
-                withGlobalStyles
-                withNormalizeCSS
-                theme={{
-                    colorScheme: "dark",
-                }}
-            >
-                <ModalsProvider>
-                    <Navbar links={links} />
-                    <Component {...pageProps} />
-                </ModalsProvider>
-            </MantineProvider>
+            <Provider store={store}>
+                <MantineProvider
+                    withGlobalStyles
+                    withNormalizeCSS
+                    theme={{
+                        colorScheme: "dark",
+                    }}
+                >
+                    <ModalsProvider>
+                        <Navbar links={links} />
+                        <Component {...pageProps} />
+                    </ModalsProvider>
+                </MantineProvider>
+            </Provider>
         </>
     );
 }
