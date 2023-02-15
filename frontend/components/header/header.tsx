@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     createStyles,
     Header,
@@ -10,6 +9,7 @@ import {
     Button,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { ThemeSwitch } from "./themeSwtich";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -18,7 +18,7 @@ const HEADER_HEIGHT = 60;
 const useStyles = createStyles((theme) => ({
     root: {
         position: "relative",
-        zIndex: 99,
+        zIndex: 999,
     },
 
     dropdown: {
@@ -80,10 +80,6 @@ const useStyles = createStyles((theme) => ({
             borderRadius: 0,
             padding: theme.spacing.md,
         },
-    },
-
-    linkLogin: {
-        background: theme.colors.cyan,
     },
 
     linkActive: {
@@ -170,22 +166,26 @@ export function Navbar({ links }: NavbarProps, userInfo?: userInfoProps) {
                     {items}
                 </Group>
 
-                {isObjEmpty(userInfo) ? (
-                    <Link href="/login">
-                        <Button variant="default" className={classes.links}>
-                            Log in
-                        </Button>
-                    </Link>
-                ) : (
-                    <Button>HI</Button>
-                )}
+                <Group>
+                    {isObjEmpty(userInfo) ? (
+                        <Link href="/login">
+                            <Button className={classes.links}>Log in</Button>
+                        </Link>
+                    ) : (
+                        <Button>HI</Button>
+                    )}
+                    <ThemeSwitch display="hide" />
+                </Group>
 
-                <Burger
-                    opened={opened}
-                    onClick={toggle}
-                    className={classes.burger}
-                    size="sm"
-                />
+                <Group className={classes.burger}>
+                    <ThemeSwitch display="show" />
+                    <Burger
+                        opened={opened}
+                        onClick={toggle}
+                        className={classes.burger}
+                        size="sm"
+                    />
+                </Group>
 
                 <Transition transition="fade" duration={200} mounted={opened}>
                     {(styles) => (
@@ -193,14 +193,10 @@ export function Navbar({ links }: NavbarProps, userInfo?: userInfoProps) {
                             className={classes.dropdown}
                             withBorder
                             style={styles}
+                            radius="lg"
+                            shadow="xl"
                         >
                             {items}
-                            <Link
-                                href="/login"
-                                className={cx(classes.link, classes.linkLogin)}
-                            >
-                                Log in
-                            </Link>
                         </Paper>
                     )}
                 </Transition>

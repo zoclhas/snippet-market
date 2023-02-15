@@ -1,7 +1,12 @@
+import { Divider } from "@mantine/core";
+
+import Hero from "../components/index/hero/hero";
+
 export default function Home() {
     return (
         <>
-            <h1>Hello World</h1>
+            <Hero />
+            <Divider />
         </>
     );
 }

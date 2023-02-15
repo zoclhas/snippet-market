@@ -1,6 +1,11 @@
+import { useState } from "react";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { MantineProvider } from "@mantine/core";
+import {
+    MantineProvider,
+    ColorSchemeProvider,
+    ColorScheme,
+} from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 
 import { Provider } from "react-redux";
@@ -8,10 +13,17 @@ import store from "../store";
 
 import { Navbar } from "@/components/header/header";
 
+import "../styles/main.css";
+
 export default function App(props: AppProps) {
     const { Component, pageProps } = props;
 
+    const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
+    const toggleColorScheme = (value?: ColorScheme) =>
+        setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
     const links = [
+        { link: "/", label: "Home" },
         {
             link: "/products",
             label: "Products",
@@ -32,18 +44,21 @@ export default function App(props: AppProps) {
                 />
             </Head>
             <Provider store={store}>
-                <MantineProvider
-                    withGlobalStyles
-                    withNormalizeCSS
-                    theme={{
-                        colorScheme: "dark",
-                    }}
+                <ColorSchemeProvider
+                    colorScheme={colorScheme}
+                    toggleColorScheme={toggleColorScheme}
                 >
-                    <ModalsProvider>
-                        <Navbar links={links} />
-                        <Component {...pageProps} />
-                    </ModalsProvider>
-                </MantineProvider>
+                    <MantineProvider
+                        theme={{ colorScheme }}
+                        withGlobalStyles
+                        withNormalizeCSS
+                    >
+                        <ModalsProvider>
+                            <Navbar links={links} />
+                            <Component {...pageProps} />
+                        </ModalsProvider>
+                    </MantineProvider>
+                </ColorSchemeProvider>
             </Provider>
         </>
     );
