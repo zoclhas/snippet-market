@@ -170,7 +170,13 @@ export function Navbar({ links }: NavbarProps, userInfo?: userInfoProps) {
                 <Group>
                     {isObjEmpty(userInfo) ? (
                         <Link href="/login">
-                            <Button className={classes.links}>Log in</Button>
+                            <Button
+                                variant="light"
+                                radius="md"
+                                className={classes.links}
+                            >
+                                Log in
+                            </Button>
                         </Link>
                     ) : (
                         <Button>HI</Button>

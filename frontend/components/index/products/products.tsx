@@ -77,7 +77,7 @@ export default function Products() {
     let { loading, products, error } = productsList;
 
     if (products) {
-        products = products.slice(0, 3);
+        products = products.slice(-3).reverse();
     }
 
     let query = "";

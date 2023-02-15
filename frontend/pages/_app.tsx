@@ -28,10 +28,7 @@ export default function App(props: AppProps) {
             link: "/products",
             label: "Products",
         },
-        {
-            link: "/contact",
-            label: "Contact",
-        },
+        { link: "/faq", label: "FaQ" },
     ];
 
     const store = useStore(pageProps.initialReduxState);

@@ -100,7 +100,8 @@ export default function Hero() {
                         <Button
                             size="xl"
                             className={classes.control}
-                            variant="gradient"
+                            variant="light"
+                            radius="md"
                             gradient={{ from: "blue", to: "cyan" }}
                             rightIcon={<FontAwesomeIcon icon={faChevronDown} />}
                         >
@@ -110,10 +111,9 @@ export default function Hero() {
 
                     <Link href="/login">
                         <Button
-                            component="a"
-                            href="https://github.com/mantinedev/mantine"
                             size="xl"
                             variant="default"
+                            radius="md"
                             className={classes.control}
                             rightIcon={
                                 <FontAwesomeIcon
