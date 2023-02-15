@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Dispatch } from "redux";
 import {
     PRODUCTS_LIST_REQUEST,
     PRODUCTS_LIST_SUCCESS,
@@ -11,12 +12,12 @@ import {
 const url = process.env.NEXT_PUBLIC_API_URL;
 
 export const listProducts =
-    (query?: number, page?: number) => async (dispatch: any) => {
+    (query: string, page: number) => async (dispatch: Dispatch) => {
         try {
             dispatch({ type: PRODUCTS_LIST_REQUEST });
 
             const { data } = await axios.get(
-                `${url}/api/products?query=${query}page=${page}`
+                `${url}/api/products?query=${query}&page=${page}`
             );
 
             dispatch({

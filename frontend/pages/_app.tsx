@@ -9,11 +9,11 @@ import {
 import { ModalsProvider } from "@mantine/modals";
 
 import { Provider } from "react-redux";
-import store from "../store";
+import { useStore } from "@/store";
 
 import { Navbar } from "@/components/header/header";
 
-import "../styles/main.css";
+import "@/styles/main.css";
 
 export default function App(props: AppProps) {
     const { Component, pageProps } = props;
@@ -33,6 +33,8 @@ export default function App(props: AppProps) {
             label: "Contact",
         },
     ];
+
+    const store = useStore(pageProps.initialReduxState);
 
     return (
         <>

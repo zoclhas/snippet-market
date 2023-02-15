@@ -1,4 +1,6 @@
 * {
     box-sizing: border-box;
     scroll-behavior: smooth;
+
+    transition: 175ms ease-in-out;
 }

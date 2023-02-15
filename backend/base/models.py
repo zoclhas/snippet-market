@@ -27,6 +27,7 @@ class Product(models.Model):
     image = WEBPField(verbose_name=("Image"), upload_to=image_folder, null=True, blank=True)
     description = models.TextField(null=False, blank=False)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    old_price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     countInStock = models.IntegerField(null=True, blank=True, default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
 
