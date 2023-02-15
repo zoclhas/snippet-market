@@ -84,7 +84,7 @@ export default function Products() {
     let pageNo = 1;
 
     useEffect(() => {
-        dispatch(listProducts(query, pageNo));
+        dispatch(listProducts(query, pageNo) as any);
     }, [dispatch, query, pageNo]);
 
     const url = process.env.NEXT_PUBLIC_API_URL;
