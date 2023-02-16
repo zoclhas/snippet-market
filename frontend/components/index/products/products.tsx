@@ -105,7 +105,15 @@ export default function Products() {
                     {error}
                 </Message>
             ) : (
-                <SimpleGrid cols={3} spacing="sm" verticalSpacing="sm">
+                <SimpleGrid
+                    cols={3}
+                    spacing="sm"
+                    verticalSpacing="sm"
+                    breakpoints={[
+                        { maxWidth: "xs", cols: 1 },
+                        { maxWidth: "sm", cols: 2 },
+                    ]}
+                >
                     {products.map((product: any) => (
                         <Card
                             shadow="sm"

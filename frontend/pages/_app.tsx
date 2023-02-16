@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import { useStore } from "@/store";
 
 import { Navbar } from "@/components/header/header";
+import { Footer } from "@/components/footer/footer";
 
 import "@/styles/main.css";
 
@@ -55,6 +56,7 @@ export default function App(props: AppProps) {
                         <ModalsProvider>
                             <Navbar links={links} />
                             <Component {...pageProps} />
+                            <Footer links={links} />
                         </ModalsProvider>
                     </MantineProvider>
                 </ColorSchemeProvider>
