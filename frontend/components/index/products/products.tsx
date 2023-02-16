@@ -14,7 +14,6 @@ import {
     SimpleGrid,
 } from "@mantine/core";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Message } from "@/components/message/message";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -69,7 +68,6 @@ const useStyles = createStyles((theme) => ({
 export default function Products() {
     const { classes } = useStyles();
     const dispatch = useDispatch();
-    const router = useRouter();
 
     const productsList = useSelector(
         (state: any) => state.productReducer.products
