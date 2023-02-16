@@ -41,3 +41,53 @@ def getProduct(request, pk):
 
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def createProduct(request):
+    product = Product.objects.create(
+        user = request.user,
+        name = "Sample Product",
+        description = "Sample Description",
+        price = 0,
+        old_price = None,
+        count_in_stock = 0,
+    )
+    product.save()
+
+    serilizer = ProductSerializer(product, many=False)
+    return Response(serilizer.data)
+
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def deleteProduct(request, pk):
+    product = Product.objects.get(id=pk)
+    product.delete()
+    return Response('Product deleted.')
+
+@api_view(["PUT"])
+@permission_classes([IsAdminUser])
+def updateProduct(request, pk):
+    data = request.data
+    product = Product.objects.get(id=pk)
+
+    product.name = data["name"]
+    product.description = data["description"]
+    product.price = data["price"]
+    product.old_price = data["old_price"]
+    product.count_in_stock = data["stock"]
+    product.save()
+
+    serialzier = ProductSerializer(product, many=False)
+    return Response(serialzier.data)
+
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def uploadProductImage(request):
+    data = request.data
+
+    product = Product.objects.get(id = data["product_id"])
+    product.image = request.FILES.get("image")
+    product.save()
+
+    return Response("Image uploaded.")
