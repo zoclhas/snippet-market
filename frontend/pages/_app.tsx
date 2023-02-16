@@ -14,6 +14,8 @@ import { useStore } from "@/store";
 import { Navbar } from "@/components/header/header";
 import { Footer } from "@/components/footer/footer";
 
+import { Analytics } from "@vercel/analytics/react";
+
 import "@/styles/main.css";
 
 export default function App(props: AppProps) {
@@ -57,6 +59,7 @@ export default function App(props: AppProps) {
                             <Navbar links={links} />
                             <Component {...pageProps} />
                             <Footer links={links} />
+                            <Analytics />
                         </ModalsProvider>
                     </MantineProvider>
                 </ColorSchemeProvider>
