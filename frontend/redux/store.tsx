@@ -4,7 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import productReducer from "@/redux/reducers/productReducers";
 import { cartReducer } from "@/redux/reducers/cartReducers";
-import { userLoginReducer } from "./reducers/userReducers";
+import { userLoginReducer, userRegisterReducer } from "./reducers/userReducers";
 
 let store;
 
@@ -12,6 +12,7 @@ const reducers = combineReducers({
     productReducer,
     cart: cartReducer,
     userLogin: userLoginReducer,
+    userRegister: userRegisterReducer,
 });
 
 function initStore(initialState) {
