@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     Container,
@@ -72,6 +72,12 @@ export default function Product() {
     useEffect(() => {
         dispatch(getProduct(id) as any);
     }, [dispatch, id]);
+
+    const [qty, setQty] = useState<string | number>(1);
+
+    const addToCart = () => {
+        router.push(`/cart?id=${id}&qty=${qty}`);
+    };
 
     const url = process.env.NEXT_PUBLIC_API_URL;
     return (
@@ -147,6 +153,10 @@ export default function Product() {
                                         <Group>
                                             <Text fw={800}>Qty:</Text>
                                             <Select
+                                                value={String(qty)}
+                                                disabled={
+                                                    product.count_in_stock <= 0
+                                                }
                                                 radius="lg"
                                                 data={Array(
                                                     product.count_in_stock
@@ -156,13 +166,19 @@ export default function Product() {
                                                         (_, index) =>
                                                             `${index + 1}`
                                                     )}
+                                                onChange={setQty}
                                             />
                                         </Group>
                                     </Text>
                                     <Card.Section>
                                         <Divider />
                                     </Card.Section>
-                                    <Button mt={16} variant="light" radius="lg">
+                                    <Button
+                                        mt={16}
+                                        variant="light"
+                                        radius="lg"
+                                        onClick={addToCart}
+                                    >
                                         <FontAwesomeIcon icon={faCartPlus} />
                                         &nbsp; Add to Cart
                                     </Button>
