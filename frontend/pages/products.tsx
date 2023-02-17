@@ -34,6 +34,9 @@ const useStyles = createStyles((theme) => ({
         position: "relative",
         bottom: "0px",
 
+        display: "flex",
+        flexDirection: "column",
+
         "&:hover": {
             bottom: "6px",
         },
@@ -43,6 +46,8 @@ const useStyles = createStyles((theme) => ({
         display: "grid",
         gridTemplateRows: "0.5fr 1fr 0.5fr",
         minHeight: "fit-content",
+
+        flexGrow: 1,
     },
 
     product_image_wrapper: {
@@ -65,6 +70,11 @@ const useStyles = createStyles((theme) => ({
     old_price: {
         textDecoration: "line-through",
         color: theme.colors.gray[6],
+    },
+
+    card_description: {
+        maxHeight: 120,
+        overflow: "hidden",
     },
 
     link: {
@@ -146,7 +156,11 @@ export default function Products() {
                                         p="xl"
                                         className={classes.card_content}
                                     >
-                                        <Card.Section pl="xl" pr="xl">
+                                        <Card.Section
+                                            pl="xl"
+                                            pr="xl"
+                                            style={{ alignSelf: "flex-start" }}
+                                        >
                                             <Group>
                                                 <Text size={22} weight={800}>
                                                     {product.name}
@@ -182,11 +196,13 @@ export default function Products() {
                                                     "<br />"
                                                 ),
                                             }}
+                                            className={classes.card_description}
                                         ></Text>
 
                                         <Link
                                             href={`/product/${product.id}`}
                                             className={classes.link}
+                                            style={{ alignSelf: "flex-end" }}
                                         >
                                             <Button
                                                 variant="light"
