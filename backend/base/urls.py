@@ -14,5 +14,9 @@ urlpatterns = [
     path("product/upload/", pv.uploadProductImage, name="upload-product-image"),
 
     path("users/login/", uv.MyTokenObtainPairView.as_view(), name="token-obtain-pair"),
-    path("users/register/", uv.registerUser, name="register-user")
+    path("users/register/", uv.registerUser, name="register-user"),
+
+    path("users/<int:pk>/", uv.getUsers, name="get-users"),
+    path("users/profile/", uv.getUserProfile, name="get-user-profile"),
+    path("users/profile/update/", uv.updateUserProfile, name="update-user-profile"),
 ]

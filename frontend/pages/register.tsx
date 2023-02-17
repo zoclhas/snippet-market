@@ -119,7 +119,7 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [passwordErr, setPasswordErr] = useState(false as any);
+    const [passwordErr, setPasswordErr] = useState(false as boolean | string);
 
     const redirect = router.query["redirect"];
 
