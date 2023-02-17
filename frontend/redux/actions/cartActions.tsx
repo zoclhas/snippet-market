@@ -2,7 +2,6 @@ import {
     CART_ADD_ITEM,
     CART_REMOVE_ITEM,
     CART_SAVE_SHIPPING_ADDRESS,
-    CART_CLEAR_ITEMS,
 } from "@/redux/types/cartTypes";
 import axios from "axios";
 import { Dispatch } from "redux";
@@ -10,7 +9,7 @@ import { Dispatch } from "redux";
 const url = process.env.NEXT_PUBLIC_API_URL;
 
 export const addToCart =
-    (id: number, qty: number) => async (dispatch: Dispatch, getState: any) => {
+    (id: number, qty: number) => async (dispatch: any, getState: any) => {
         const { data } = await axios.get(`${url}/api/product/${id}`);
 
         dispatch({
@@ -31,7 +30,7 @@ export const addToCart =
     };
 
 export const removeFromCart =
-    (id: number) => (dispatch: Dispatch, getState: any) => {
+    (id: number) => (dispatch: any, getState: any) => {
         dispatch({
             type: CART_REMOVE_ITEM,
             payload: id,

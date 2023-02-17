@@ -13,7 +13,6 @@ import {
     Divider,
     Select,
 } from "@mantine/core";
-import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Message } from "@/components/message/message";
@@ -80,6 +79,7 @@ export default function Product() {
     };
 
     const url = process.env.NEXT_PUBLIC_API_URL;
+
     return (
         <Container className={classes.wrapper}>
             {loading ? (
@@ -175,6 +175,7 @@ export default function Product() {
                                     </Card.Section>
                                     <Button
                                         mt={16}
+                                        disabled={product.count_in_stock <= 0}
                                         variant="light"
                                         radius="lg"
                                         onClick={addToCart}

@@ -7,12 +7,12 @@ import { cartReducer } from "@/redux/reducers/cartReducers";
 
 let store;
 
-const reducers = combineReducers({ productReducer, cartReducer });
+const reducers = combineReducers({ productReducer, cart: cartReducer });
 
 function initStore(initialState) {
     return createStore(
         reducers,
-        initialState,
+        otherInitState as any,
         composeWithDevTools(applyMiddleware(thunkMiddleware))
     );
 }
@@ -24,9 +24,22 @@ const userInfoFromStorage = () => {
     return null;
 };
 
+const cartItemsFromStorage = () => {
+    if (typeof localStorage !== "undefined") {
+        return localStorage.getItem("cartItems")
+            ? JSON.parse(localStorage.getItem("cartItems"))
+            : [];
+    }
+    return null;
+};
+
+const cartItems = cartItemsFromStorage();
+
 const userInfo = userInfoFromStorage();
 
-const otherInitState = { userLogin: { userInfo: userInfo } };
+const otherInitState = {
+    cart: { cartItems: cartItems },
+};
 
 export const initializeStore = (preloadedState) => {
     let _store = store ?? initStore(preloadedState);

@@ -5,10 +5,7 @@ import {
     CART_CLEAR_ITEMS,
 } from "@/redux/types/cartTypes";
 
-export const cartReducer = (
-    state = { cartItems: [], shippingAddress: {} },
-    action: any
-) => {
+export const cartReducer = (state = { cartItems: [] }, action: any) => {
     switch (action.type) {
         case CART_ADD_ITEM:
             const item = action.payload;
