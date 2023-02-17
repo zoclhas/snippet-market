@@ -16,10 +16,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
 
         serializers = UserSerializerWithToken(self.user).data
-        
         for k, v in serializers.items():
             data[k] = v
-
 
         return data
 
@@ -31,7 +29,8 @@ def registerUser(request):
     data = request.data
     try:
         user = User.objects.create(
-            username=data['email'],
+            first_name=data['name'],
+            username=data['username'],
             email=data['email'],
             password=make_password(data['password'])
         )
@@ -49,6 +48,7 @@ def updateUserProfile(request):
     serializer = UserSerializerWithToken(user, many=False)
 
     data = request.data
+    user.first_name = data['name']
     user.username = data['email']
     user.email = data['email']
 
@@ -88,7 +88,8 @@ def updateUser(request, pk):
     user = User.objects.get(id=pk)
     data = request.data
 
-    user.username = data['username']
+    user.first_name = data['name']
+    user.username = data['email']
     user.email = data['email']
     user.is_staff = data['isAdmin']
     user.save()

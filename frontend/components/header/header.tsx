@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
     createStyles,
     Header,
@@ -7,14 +8,23 @@ import {
     Paper,
     Transition,
     Button,
+    Menu,
+    Modal,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ThemeSwitch } from "./themeSwtich";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import {
+    faCartShopping,
+    faUser,
+    faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
+
+import { logout } from "@/redux/actions/userActions";
 
 const HEADER_HEIGHT = 60;
 
@@ -98,25 +108,23 @@ const useStyles = createStyles((theme) => ({
             }).color,
         },
     },
+
+    modal_footer: {
+        display: "flex",
+        gap: "1rem",
+        justifyContent: "flex-end",
+    },
 }));
 
 interface NavbarProps {
     links: { link: string; label: string }[];
 }
 
-interface userInfoProps {
-    userInfo: {
-        token: string;
-        id: number;
-        username: string;
-        email: string;
-        isAdmin: boolean;
-    }[];
-}
-
-export function Navbar({ links }: NavbarProps, userInfo?: userInfoProps) {
+export function Navbar({ links }: NavbarProps) {
+    const [userMenuOpened, setUserMenuOpened] = useState(false);
     const [opened, { toggle, close }] = useDisclosure(false);
     const { classes, cx } = useStyles();
+    const [logoutModal, setLogoutModal] = useState(false);
 
     const router = useRouter();
 
@@ -135,96 +143,177 @@ export function Navbar({ links }: NavbarProps, userInfo?: userInfoProps) {
         </Link>
     ));
 
-    function isObjEmpty(obj: any) {
-        return Object.keys(obj).length === 0;
-    }
+    const userLogin = useSelector((state: any) => state.userLogin);
+    const { userInfo } = userLogin;
+
+    const dispatch = useDispatch();
+
+    const logoutHandler = () => {
+        dispatch(logout() as any);
+    };
 
     return (
-        <Header height={HEADER_HEIGHT} className={classes.root}>
-            <Container className={classes.header}>
-                <Link href="/" className={classes.link}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="icon icon-tabler icon-tabler-scissors"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        strokeWidth="2"
-                        stroke="currentColor"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <path
-                            stroke="none"
-                            d="M0 0h24v24H0z"
+        <>
+            <Header height={HEADER_HEIGHT} className={classes.root}>
+                <Container className={classes.header}>
+                    <Link href="/" className={classes.link}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="icon icon-tabler icon-tabler-scissors"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
                             fill="none"
-                        ></path>
-                        <path d="M6 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-                        <path d="M6 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-                        <path d="M8.6 8.6l10.4 10.4"></path>
-                        <path d="M8.6 15.4l10.4 -10.4"></path>
-                    </svg>
-                </Link>
-                <Group spacing={5} className={classes.links}>
-                    {items}
-                </Group>
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <path
+                                stroke="none"
+                                d="M0 0h24v24H0z"
+                                fill="none"
+                            ></path>
+                            <path d="M6 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                            <path d="M6 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                            <path d="M8.6 8.6l10.4 10.4"></path>
+                            <path d="M8.6 15.4l10.4 -10.4"></path>
+                        </svg>
+                    </Link>
+                    <Group spacing={5} className={classes.links}>
+                        {items}
+                    </Group>
 
-                <Group>
-                    {isObjEmpty(userInfo) ? (
-                        <Link href="/login">
+                    <Group>
+                        {userInfo ? (
+                            <Menu
+                                position="bottom-end"
+                                transition="pop-top-right"
+                                onClose={() => setUserMenuOpened(false)}
+                                onOpen={() => setUserMenuOpened(true)}
+                            >
+                                <Menu.Target>
+                                    <Button
+                                        variant="light"
+                                        radius="md"
+                                        className={classes.links}
+                                    >
+                                        {userInfo.name}
+                                    </Button>
+                                </Menu.Target>
+                                <Menu.Dropdown>
+                                    <Menu.Item
+                                        icon={<FontAwesomeIcon icon={faUser} />}
+                                        component={Link}
+                                        href="/profile"
+                                    >
+                                        Profile
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        icon={
+                                            <FontAwesomeIcon
+                                                icon={faRightFromBracket}
+                                            />
+                                        }
+                                        onClick={() => setLogoutModal(true)}
+                                    >
+                                        Logout
+                                    </Menu.Item>
+                                </Menu.Dropdown>
+                            </Menu>
+                        ) : (
+                            <Link href="/login">
+                                <Button
+                                    variant="light"
+                                    radius="md"
+                                    className={classes.links}
+                                >
+                                    Log in
+                                </Button>
+                            </Link>
+                        )}
+                        <Link href="/cart">
                             <Button
                                 variant="light"
                                 radius="md"
                                 className={classes.links}
                             >
-                                Log in
+                                <FontAwesomeIcon icon={faCartShopping} />
                             </Button>
                         </Link>
-                    ) : (
-                        <Button>HI</Button>
-                    )}
-                    <Link href="/cart">
-                        <Button
-                            variant="light"
-                            radius="md"
-                            className={classes.links}
-                        >
-                            <FontAwesomeIcon icon={faCartShopping} />
-                        </Button>
-                    </Link>
-                    <ThemeSwitch display="hide" />
-                </Group>
+                        <ThemeSwitch display="hide" />
+                    </Group>
 
-                <Group className={classes.burger}>
-                    <ThemeSwitch display="show" />
-                    <Link href="/cart">
-                        <Button variant="light" radius="md">
-                            <FontAwesomeIcon icon={faCartShopping} />
-                        </Button>
-                    </Link>
-                    <Burger
-                        opened={opened}
-                        onClick={toggle}
-                        className={classes.burger}
-                        size="sm"
-                    />
-                </Group>
+                    <Group className={classes.burger}>
+                        <ThemeSwitch display="show" />
+                        <Link href="/cart">
+                            <Button variant="light" radius="md">
+                                <FontAwesomeIcon icon={faCartShopping} />
+                            </Button>
+                        </Link>
+                        <Burger
+                            opened={opened}
+                            onClick={toggle}
+                            className={classes.burger}
+                            size="sm"
+                        />
+                    </Group>
 
-                <Transition transition="fade" duration={200} mounted={opened}>
-                    {(styles) => (
-                        <Paper
-                            className={classes.dropdown}
-                            withBorder
-                            style={styles}
-                            radius="lg"
-                            shadow="xl"
-                        >
-                            {items}
-                        </Paper>
-                    )}
-                </Transition>
-            </Container>
-        </Header>
+                    <Transition
+                        transition="fade"
+                        duration={200}
+                        mounted={opened}
+                    >
+                        {(styles) => (
+                            <Paper
+                                className={classes.dropdown}
+                                withBorder
+                                style={styles}
+                                radius="lg"
+                                shadow="xl"
+                            >
+                                {items}
+                                <Link
+                                    href="profile"
+                                    className={cx(classes.link, {
+                                        [classes.linkActive]:
+                                            router.pathname === "/profile",
+                                    })}
+                                >
+                                    Profile
+                                </Link>
+                            </Paper>
+                        )}
+                    </Transition>
+                </Container>
+            </Header>
+            <Modal
+                opened={logoutModal}
+                onClose={() => setLogoutModal(false)}
+                centered
+                overlayBlur={3}
+                title="Are you sure you want to logout?"
+                radius="lg"
+            >
+                <div className={classes.modal_footer}>
+                    <Button
+                        variant="default"
+                        onClick={() => setLogoutModal(false)}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="light"
+                        onClick={() => {
+                            logoutHandler();
+                            setLogoutModal(false);
+                        }}
+                    >
+                        Logout&nbsp;
+                        <FontAwesomeIcon icon={faRightFromBracket} />
+                    </Button>
+                </div>
+            </Modal>
+        </>
     );
 }

@@ -21,7 +21,7 @@ export const login =
 
             const { data } = await axios.post(
                 `${url}/api/users/login/`,
-                { email: email, password: password },
+                { username: email, password: password },
                 config
             );
 
@@ -41,3 +41,8 @@ export const login =
             });
         }
     };
+
+export const logout = () => (dispatch: any) => {
+    localStorage.removeItem("userInfo");
+    dispatch({ type: USER_LOGOUT });
+};
