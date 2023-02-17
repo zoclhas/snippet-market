@@ -13,6 +13,9 @@ import { ThemeSwitch } from "./themeSwtich";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+
 const HEADER_HEIGHT = 60;
 
 const useStyles = createStyles((theme) => ({
@@ -181,11 +184,25 @@ export function Navbar({ links }: NavbarProps, userInfo?: userInfoProps) {
                     ) : (
                         <Button>HI</Button>
                     )}
+                    <Link href="/cart">
+                        <Button
+                            variant="light"
+                            radius="md"
+                            className={classes.links}
+                        >
+                            <FontAwesomeIcon icon={faCartShopping} />
+                        </Button>
+                    </Link>
                     <ThemeSwitch display="hide" />
                 </Group>
 
                 <Group className={classes.burger}>
                     <ThemeSwitch display="show" />
+                    <Link href="/cart">
+                        <Button variant="light" radius="md">
+                            <FontAwesomeIcon icon={faCartShopping} />
+                        </Button>
+                    </Link>
                     <Burger
                         opened={opened}
                         onClick={toggle}

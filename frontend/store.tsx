@@ -3,10 +3,11 @@ import { createStore, applyMiddleware, combineReducers } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import productReducer from "@/redux/reducers/productReducers";
+import { cartReducer } from "@/redux/reducers/cartReducers";
 
 let store;
 
-const reducers = combineReducers({ productReducer });
+const reducers = combineReducers({ productReducer, cartReducer });
 
 function initStore(initialState) {
     return createStore(

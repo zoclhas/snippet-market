@@ -2,5 +2,11 @@
     box-sizing: border-box;
     scroll-behavior: smooth;
 
+    font-variant-numeric: tabular-nums;
+
     transition: 175ms ease-in-out;
+}
+
+.mantine-15po0m8 :is(.mantine-Image-figure, .mantine-Image-imageWrapper) {
+    height: 100%;
 }

@@ -34,3 +34,24 @@ export const listProducts =
             });
         }
     };
+
+export const getProduct = (id: number) => async (dispatch: Dispatch) => {
+    try {
+        dispatch({ type: PRODUCT_REQUEST });
+
+        const { data } = await axios.get(`${url}/api/product/${id}`);
+
+        dispatch({
+            type: PRODUCT_SUCCESS,
+            payload: data,
+        });
+    } catch (error: any) {
+        dispatch({
+            type: PRODUCT_FAIL,
+            payload:
+                error.response.data && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message,
+        });
+    }
+};

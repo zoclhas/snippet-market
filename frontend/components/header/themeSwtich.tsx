@@ -38,6 +38,7 @@ export function ThemeSwitch(display?: any) {
             <ActionIcon
                 onClick={() => toggleColorScheme()}
                 size="lg"
+                radius="md"
                 sx={(theme) => ({
                     backgroundColor:
                         theme.colorScheme === "dark"

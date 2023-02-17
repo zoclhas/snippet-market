@@ -5,7 +5,6 @@ import {
     Text,
     Title,
     createStyles,
-    Anchor,
     Space,
     Card,
     LoadingOverlay,
@@ -14,13 +13,11 @@ import {
     SimpleGrid,
 } from "@mantine/core";
 import Link from "next/link";
+import Head from "next/head";
 import { Message } from "@/components/message/message";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faArrowUpRightFromSquare,
-    faArrowRightLong,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 
 import { listProducts } from "@/redux/actions/productActions";
 
@@ -91,10 +88,6 @@ export default function Products() {
     );
     let { loading, products, error } = productsList;
 
-    if (products) {
-        products = products.slice(-3).reverse();
-    }
-
     let query = "";
     let pageNo = 1;
 
@@ -106,6 +99,9 @@ export default function Products() {
 
     return (
         <>
+            <Head>
+                <title>Snippet | Products</title>
+            </Head>
             {loading ? (
                 <div style={{ width: "100%", position: "relative" }}>
                     <LoadingOverlay visible={loading} overlayBlur={5} />
