@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import views
 from .views import product_views as pv
+from .views import user_views as uv
 
 urlpatterns = [
     path("", views.getRoutes, name="get-routes"),
@@ -11,4 +12,6 @@ urlpatterns = [
     path("product/delete/<int:pk>", pv.deleteProduct, name="delete-product"),
     path("product/update/<int:pk>", pv.updateProduct, name="update-product"),
     path("product/upload/", pv.uploadProductImage, name="upload-product-image"),
+
+    path("users/login/", uv.MyTokenObtainPairView.as_view(), name="token-obtain-pair"),
 ]
