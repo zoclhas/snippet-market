@@ -9,7 +9,7 @@ import {
 import { ModalsProvider } from "@mantine/modals";
 
 import { Provider } from "react-redux";
-import { useStore } from "@/store";
+import { useStore } from "@/redux/store";
 
 import { Navbar } from "@/components/header/header";
 import { Footer } from "@/components/footer/footer";

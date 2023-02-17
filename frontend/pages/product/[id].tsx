@@ -153,6 +153,7 @@ export default function Product() {
                                         <Group>
                                             <Text fw={800}>Qty:</Text>
                                             <Select
+                                                maxDropdownHeight={150}
                                                 value={String(qty)}
                                                 disabled={
                                                     product.count_in_stock <= 0

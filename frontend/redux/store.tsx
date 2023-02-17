@@ -4,10 +4,15 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import productReducer from "@/redux/reducers/productReducers";
 import { cartReducer } from "@/redux/reducers/cartReducers";
+import { userLoginReducer } from "./reducers/userReducers";
 
 let store;
 
-const reducers = combineReducers({ productReducer, cart: cartReducer });
+const reducers = combineReducers({
+    productReducer,
+    cart: cartReducer,
+    userLogin: userLoginReducer,
+});
 
 function initStore(initialState) {
     return createStore(
@@ -19,11 +24,12 @@ function initStore(initialState) {
 
 const userInfoFromStorage = () => {
     if (typeof localStorage !== "undefined") {
-        return JSON.parse(localStorage.getItem("userInfo"));
+        return localStorage.getItem("userInfo")
+            ? JSON.parse(localStorage.getItem("userInfo"))
+            : null;
     }
     return null;
 };
-
 const cartItemsFromStorage = () => {
     if (typeof localStorage !== "undefined") {
         return localStorage.getItem("cartItems")
@@ -34,10 +40,10 @@ const cartItemsFromStorage = () => {
 };
 
 const cartItems = cartItemsFromStorage();
-
 const userInfo = userInfoFromStorage();
 
 const otherInitState = {
+    userLogin: { userInfo: userInfo },
     cart: { cartItems: cartItems },
 };
 

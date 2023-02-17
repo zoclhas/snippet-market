@@ -1,10 +1,9 @@
+import axios from "axios";
 import {
     CART_ADD_ITEM,
     CART_REMOVE_ITEM,
     CART_SAVE_SHIPPING_ADDRESS,
 } from "@/redux/types/cartTypes";
-import axios from "axios";
-import { Dispatch } from "redux";
 
 const url = process.env.NEXT_PUBLIC_API_URL;
 
@@ -42,7 +41,7 @@ export const removeFromCart =
         );
     };
 
-export const saveShippingAddress = (data: object) => (dispatch: Dispatch) => {
+export const saveShippingAddress = (data: object) => (dispatch: any) => {
     dispatch({
         type: CART_SAVE_SHIPPING_ADDRESS,
         payload: data,
