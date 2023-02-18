@@ -130,43 +130,6 @@ export const getUserDetails =
         }
     };
 
-export const resetUserPassword =
-    (id: string) => async (dispatch: any, getState, getCookie) => {
-        try {
-            dispatch({ type: USER_DETAILS_REQUEST });
-
-            const {
-                userLogin: { userInfo },
-            } = getState();
-
-            const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    Authorization: `Bearer ${userInfo.token}`,
-                },
-            };
-
-            // const { data } = await axios.get(`${url}/api/users/${id}/`, config);
-            const { data } = await axios.post(
-                `${url}/api/users/password-reset/`,
-                config
-            );
-
-            dispatch({
-                type: USER_DETAILS_SUCCESS,
-                payload: data,
-            });
-        } catch (error) {
-            dispatch({
-                type: USER_DETAILS_FAIL,
-                payload:
-                    error.response.data && error.response.data.detail
-                        ? error.response.data.detail
-                        : error.message,
-            });
-        }
-    };
-
 export const updateUserProfile =
     (user: object) => async (dispatch: any, getState) => {
         try {

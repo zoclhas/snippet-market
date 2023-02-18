@@ -16,6 +16,7 @@ import { ThemeSwitch } from "./themeSwtich";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -143,10 +144,9 @@ export function Navbar({ links }: NavbarProps) {
         </Link>
     ));
 
+    const dispatch = useDispatch();
     const userLogin = useSelector((state: any) => state.userLogin);
     const { userInfo } = userLogin;
-
-    const dispatch = useDispatch();
 
     const logoutHandler = () => {
         dispatch(logout() as any);

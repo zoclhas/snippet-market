@@ -104,45 +104,10 @@ def deleteUser(request, pk):
     userForDeletion.delete()
     return Response('User was deleted')
 
-from django.views.decorators.csrf import csrf_exempt
-from django.middleware.csrf import get_token
-
-@csrf_exempt
-@api_view(["GET"])
-def getCSRFToken(request):
-    return Response({'token': get_token(request)})
-
-from django.contrib.auth.views import PasswordResetView
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.decorators import authentication_classes
-
-@csrf_exempt
-@api_view(["POST"])
-@authentication_classes([SessionAuthentication])
-def sendResetMail(request):
-    email = request.data.get('email')
-
-    # Validate the email address input
-    try:
-        validate_email(email)
-    except ValidationError:
-        return Response({'error': 'Invalid email address'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    try:
-        user = User.objects.get(email=email)
-    except User.DoesNotExist:
-        return Response({'error': 'Email address not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    # Create a new instance of PasswordResetView and set the email
-    reset_view = PasswordResetView.as_view(extra_context={'email': email})
-
-    # Call the post method of the view with the request
-    response = reset_view(request)
-
-    # Return the response from the PasswordResetView
-    return response
-
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def verifyUser(request):
+    user = request.user
+    serializer = UserSerializerWithToken(user, many=False)
+    print(serializer.data)
+    return Response(serializer.data)

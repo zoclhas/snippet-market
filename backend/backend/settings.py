@@ -104,6 +104,7 @@ INSTALLED_APPS = [
     "corsheaders",
 
     "base.apps.BaseConfig",
+    "templates",
 ]
 
 MIDDLEWARE = [
@@ -120,10 +121,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'backend.urls'
 
+import os
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            "templates"
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -202,7 +207,3 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_HEADERS = [
-    'x-csrf-token'
-]
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','http://.127.0.0.1:8000']

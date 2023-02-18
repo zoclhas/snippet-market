@@ -79,6 +79,8 @@ export default function Login() {
         }, 1500);
     };
 
+    const url = process.env.NEXT_PUBLIC_API_URL;
+
     return (
         <>
             <Head>
@@ -162,7 +164,7 @@ export default function Login() {
                             <Text size="sm">
                                 <Anchor
                                     component={Link}
-                                    href="/forgot-password"
+                                    href={`${url}/api/password-reset/`}
                                 >
                                     Forgot Password?
                                 </Anchor>
