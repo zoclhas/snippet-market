@@ -46,13 +46,22 @@ const cartItemsFromStorage = () => {
     }
     return null;
 };
+const shippingAddressFromStorage = () => {
+    if (typeof localStorage !== "undefined") {
+        return localStorage.getItem("shippingAddress")
+            ? JSON.parse(localStorage.getItem("shippingAddress"))
+            : {};
+    }
+    return null;
+};
 
 const cartItems = cartItemsFromStorage();
 const userInfo = userInfoFromStorage();
+const shippingInfo = shippingAddressFromStorage();
 
 const otherInitState = {
     userLogin: { userInfo: userInfo },
-    cart: { cartItems: cartItems },
+    cart: { cartItems: cartItems, shippingAddress: shippingInfo },
 };
 
 export const initializeStore = (preloadedState) => {

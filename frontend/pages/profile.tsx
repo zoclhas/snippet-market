@@ -4,7 +4,6 @@ import {
     Card,
     TextInput,
     Loader,
-    PasswordInput,
     Divider,
     Text,
     Title,
@@ -104,111 +103,122 @@ export default function Profile() {
     const url = process.env.NEXT_PUBLIC_API_URL;
 
     return (
-        <Container className={classes.wrapper}>
-            <Title>User Profile</Title>
-            <Space h={32} />
-            <div className={classes.profile_grid}>
-                <div>
-                    <Title size={22}>Edit Profile</Title>
-                    <Space h={16} />
-                    {loading && (
-                        <>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
+        <>
+            <Head>
+                <title>Snippet | Profile</title>
+            </Head>
+            <Container className={classes.wrapper}>
+                <Title>User Profile</Title>
+                <Space h={32} />
+                <div className={classes.profile_grid}>
+                    <div>
+                        <Title size={22}>Edit Profile</Title>
+                        <Space h={16} />
+                        {loading && (
+                            <>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <Loader variant="bars" />
+                                </div>
+                                <Space h={16} />
+                            </>
+                        )}
+                        {error && (
+                            <>
+                                <Message title="Uh oh!" color="red">
+                                    {error}
+                                </Message>
+                                <Space h={16} />
+                            </>
+                        )}
+                        {updateError && (
+                            <>
+                                <Message title="Uh oh!" color="red">
+                                    {updateError}
+                                </Message>
+                                <Space h={16} />
+                            </>
+                        )}
+                        {user && (
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    updateUserHandler();
                                 }}
                             >
-                                <Loader variant="bars" />
-                            </div>
-                            <Space h={16} />
-                        </>
-                    )}
-                    {error && (
-                        <>
-                            <Message title="Uh oh!" color="red">
-                                {error}
-                            </Message>
-                            <Space h={16} />
-                        </>
-                    )}
-                    {updateError && (
-                        <>
-                            <Message title="Uh oh!" color="red">
-                                {updateError}
-                            </Message>
-                            <Space h={16} />
-                        </>
-                    )}
-                    {user && (
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                updateUserHandler();
-                            }}
-                        >
-                            <Card withBorder shadow="xl" radius="lg">
-                                <TextInput
-                                    icon={<FontAwesomeIcon icon={faIdBadge} />}
-                                    defaultValue={user.name}
-                                    placeholder="John Doe"
-                                    radius="xl"
-                                    variant="filled"
-                                    required
-                                    type="text"
-                                    onChange={(e) => setName(e.target.value)}
-                                    mb={16}
-                                />
-                                <TextInput
-                                    icon={<FontAwesomeIcon icon={faAt} />}
-                                    defaultValue={user.email}
-                                    placeholder="johndoe@example.com"
-                                    radius="xl"
-                                    variant="filled"
-                                    required
-                                    type="email"
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    mb={16}
-                                />
-                                <Card.Section mb={16}>
-                                    <Divider />
-                                </Card.Section>
-                                <Button
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        updateUserHandler();
-                                    }}
-                                    variant="light"
-                                    radius="xl"
-                                    style={{ width: "100%" }}
-                                    type="submit"
-                                    loading={loading}
-                                    mb={16}
-                                >
-                                    Update&nbsp;
-                                    <FontAwesomeIcon icon={faPenToSquare} />
-                                </Button>
-                                <Card.Section mb={16}>
-                                    <Divider />
-                                </Card.Section>
-                                <div className={classes.bottom_links}>
-                                    <Text size="sm">
-                                        <Anchor
-                                            component={Link}
-                                            href={`${url}/api/password-reset/`}
-                                        >
-                                            Change Password?
-                                        </Anchor>
-                                    </Text>
-                                </div>
-                            </Card>
-                        </form>
-                    )}
+                                <Card withBorder shadow="xl" radius="lg">
+                                    <TextInput
+                                        icon={
+                                            <FontAwesomeIcon icon={faIdBadge} />
+                                        }
+                                        defaultValue={user.name}
+                                        placeholder="John Doe"
+                                        radius="xl"
+                                        variant="filled"
+                                        required
+                                        type="text"
+                                        onChange={(e) =>
+                                            setName(e.target.value)
+                                        }
+                                        mb={16}
+                                    />
+                                    <TextInput
+                                        icon={<FontAwesomeIcon icon={faAt} />}
+                                        defaultValue={user.email}
+                                        placeholder="johndoe@example.com"
+                                        radius="xl"
+                                        variant="filled"
+                                        required
+                                        type="email"
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
+                                        mb={16}
+                                    />
+                                    <Card.Section mb={16}>
+                                        <Divider />
+                                    </Card.Section>
+                                    <Button
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            updateUserHandler();
+                                        }}
+                                        variant="light"
+                                        radius="xl"
+                                        style={{ width: "100%" }}
+                                        type="submit"
+                                        loading={loading}
+                                        mb={16}
+                                    >
+                                        Update&nbsp;
+                                        <FontAwesomeIcon icon={faPenToSquare} />
+                                    </Button>
+                                    <Card.Section mb={16}>
+                                        <Divider />
+                                    </Card.Section>
+                                    <div className={classes.bottom_links}>
+                                        <Text size="sm">
+                                            <Anchor
+                                                component={Link}
+                                                href={`${url}/api/password-reset/`}
+                                            >
+                                                Change Password?
+                                            </Anchor>
+                                        </Text>
+                                    </div>
+                                </Card>
+                            </form>
+                        )}
+                    </div>
+                    <div>
+                        <Title size={22}>Orders</Title>
+                    </div>
                 </div>
-                <div>
-                    <Title size={22}>Orders</Title>
-                </div>
-            </div>
-        </Container>
+            </Container>
+        </>
     );
 }
