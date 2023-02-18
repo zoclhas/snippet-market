@@ -15,7 +15,6 @@ urlpatterns = [
 
     path("users/login/", uv.MyTokenObtainPairView.as_view(), name="token-obtain-pair"),
     path("users/register/", uv.registerUser, name="register-user"),
-    path("users/verify/", uv.verifyUser, name="verify-user"),
 
     path("users/", uv.getUsers, name="get-users"),
     path("users/profile/", uv.getUserProfile, name="get-user-profile"),

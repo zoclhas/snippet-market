@@ -318,7 +318,7 @@ export default function Register() {
                             <Divider />
                         </Card.Section>
                         <Button
-                            onClick={registerHandler}
+                            onSubmit={registerHandler}
                             variant="light"
                             radius="xl"
                             mb={16}

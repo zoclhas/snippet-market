@@ -146,7 +146,7 @@ export default function Login() {
                             <Divider />
                         </Card.Section>
                         <Button
-                            onClick={loginHandler}
+                            onSubmit={loginHandler}
                             variant="light"
                             radius="xl"
                             mb={16}

@@ -1,5 +1,6 @@
 import { createStyles, Container, Text, Button, Group } from "@mantine/core";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -75,6 +76,10 @@ const useStyles = createStyles((theme) => ({
 export default function Hero() {
     const { classes } = useStyles();
 
+    const dispatch = useDispatch();
+    const userLogin = useSelector((state: any) => state.userLogin);
+    const { userInfo } = userLogin;
+
     return (
         <div className={classes.wrapper}>
             <Container size={700} className={classes.inner}>
@@ -109,21 +114,23 @@ export default function Hero() {
                         </Button>
                     </a>
 
-                    <Link href="/login">
-                        <Button
-                            size="xl"
-                            variant="default"
-                            radius="md"
-                            className={classes.control}
-                            rightIcon={
-                                <FontAwesomeIcon
-                                    icon={faArrowUpRightFromSquare}
-                                />
-                            }
-                        >
-                            Login
-                        </Button>
-                    </Link>
+                    {!userInfo && (
+                        <Link href="/login">
+                            <Button
+                                size="xl"
+                                variant="default"
+                                radius="md"
+                                className={classes.control}
+                                rightIcon={
+                                    <FontAwesomeIcon
+                                        icon={faArrowUpRightFromSquare}
+                                    />
+                                }
+                            >
+                                Login
+                            </Button>
+                        </Link>
+                    )}
                 </Group>
             </Container>
         </div>

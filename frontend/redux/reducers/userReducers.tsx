@@ -11,6 +11,7 @@ import {
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
     USER_DETAILS_FAIL,
+    USER_DETAILS_RESET,
     //
     USER_UPDATE_PROFILE_REQUEST,
     USER_UPDATE_PROFILE_SUCCESS,
@@ -88,8 +89,8 @@ export const userDetailsReducer = (state = {}, action: any) => {
                 error: action.payload,
             };
 
-        case USER_UPDATE_PROFILE_RESET:
-            return {};
+        case USER_DETAILS_RESET:
+            return { user: {} };
 
         default:
             return state;
@@ -116,6 +117,9 @@ export const userUpdateProfileReducer = (state = { user: {} }, action) => {
                 success: false,
                 error: action.payload,
             };
+
+        case USER_UPDATE_PROFILE_RESET:
+            return {};
 
         default:
             return state;

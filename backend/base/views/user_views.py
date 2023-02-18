@@ -51,10 +51,6 @@ def updateUserProfile(request):
     user.first_name = data['name']
     user.username = data['email']
     user.email = data['email']
-
-    if data['password'] != '':
-        user.password = make_password(data['password'])
-
     user.save()
 
     return Response(serializer.data)
@@ -103,11 +99,3 @@ def deleteUser(request, pk):
     userForDeletion = User.objects.get(id=pk)
     userForDeletion.delete()
     return Response('User was deleted')
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def verifyUser(request):
-    user = request.user
-    serializer = UserSerializerWithToken(user, many=False)
-    print(serializer.data)
-    return Response(serializer.data)

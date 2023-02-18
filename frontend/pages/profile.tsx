@@ -27,7 +27,8 @@ import {
     faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { getUserDetails } from "@/redux/actions/userActions";
+import { getUserDetails, updateUserProfile } from "@/redux/actions/userActions";
+import { USER_UPDATE_PROFILE_RESET } from "@/redux/types/userTypes";
 
 const useStyles = createStyles({
     wrapper: {
@@ -41,6 +42,11 @@ const useStyles = createStyles({
         display: "grid",
         gridTemplateColumns: "0.4fr 1fr",
         gap: "1rem",
+    },
+
+    bottom_links: {
+        display: "flex",
+        justifyContent: "space-between",
     },
 });
 
@@ -67,17 +73,35 @@ export default function Profile() {
     const userLogin = useSelector((state: any) => state.userLogin);
     const { userInfo } = userLogin;
 
+    const userUpdateProfile = useSelector(
+        (state: any) => state.userUpdateProfile
+    );
+    const { success, error: updateError } = userUpdateProfile;
+
     useEffect(() => {
         if (!userInfo) {
             router.push("/login");
         } else {
-            if (!user || !user.name) dispatch(getUserDetails("profile") as any);
+            if (!user || !user.name || success) {
+                dispatch({ type: USER_UPDATE_PROFILE_RESET });
+                dispatch(getUserDetails("profile") as any);
+                setName(userInfo.name);
+                setEmail(userInfo.email);
+            }
         }
-    }, [dispatch, userInfo]);
+    }, [dispatch, userInfo, user, success]);
 
     const updateUserHandler = () => {
-        //TODO
+        dispatch(
+            updateUserProfile({
+                id: user.id,
+                name: name,
+                email: email,
+            }) as any
+        );
     };
+
+    const url = process.env.NEXT_PUBLIC_API_URL;
 
     return (
         <Container className={classes.wrapper}>
@@ -108,8 +132,21 @@ export default function Profile() {
                             <Space h={16} />
                         </>
                     )}
+                    {updateError && (
+                        <>
+                            <Message title="Uh oh!" color="red">
+                                {updateError}
+                            </Message>
+                            <Space h={16} />
+                        </>
+                    )}
                     {user && (
-                        <form onSubmit={updateUserHandler}>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                updateUserHandler();
+                            }}
+                        >
                             <Card withBorder shadow="xl" radius="lg">
                                 <TextInput
                                     icon={<FontAwesomeIcon icon={faIdBadge} />}
@@ -137,16 +174,33 @@ export default function Profile() {
                                     <Divider />
                                 </Card.Section>
                                 <Button
-                                    onClick={updateUserHandler}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        updateUserHandler();
+                                    }}
                                     variant="light"
                                     radius="xl"
                                     style={{ width: "100%" }}
                                     type="submit"
                                     loading={loading}
+                                    mb={16}
                                 >
                                     Update&nbsp;
                                     <FontAwesomeIcon icon={faPenToSquare} />
                                 </Button>
+                                <Card.Section mb={16}>
+                                    <Divider />
+                                </Card.Section>
+                                <div className={classes.bottom_links}>
+                                    <Text size="sm">
+                                        <Anchor
+                                            component={Link}
+                                            href={`${url}/api/password-reset/`}
+                                        >
+                                            Change Password?
+                                        </Anchor>
+                                    </Text>
+                                </div>
                             </Card>
                         </form>
                     )}

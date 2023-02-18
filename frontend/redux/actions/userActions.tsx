@@ -12,11 +12,11 @@ import {
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
     USER_DETAILS_FAIL,
+    USER_DETAILS_RESET,
     //
     USER_UPDATE_PROFILE_REQUEST,
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_FAIL,
-    USER_UPDATE_PROFILE_RESET,
 } from "@/redux/types/userTypes";
 const url = process.env.NEXT_PUBLIC_API_URL;
 
@@ -57,6 +57,7 @@ export const login =
 export const logout = () => (dispatch: any) => {
     localStorage.removeItem("userInfo");
     dispatch({ type: USER_LOGOUT });
+    dispatch({ type: USER_DETAILS_RESET });
 };
 
 export const register =
@@ -146,16 +147,18 @@ export const updateUserProfile =
                 },
             };
 
-            const { data } = await axios.get(
+            const { data } = await axios.put(
                 `${url}/api/users/profile/update/`,
-                user
-                // config,
+                user,
+                config
             );
 
             dispatch({
                 type: USER_UPDATE_PROFILE_SUCCESS,
                 payload: data,
             });
+
+            localStorage.setItem("userInfo", JSON.stringify(data));
         } catch (error) {
             dispatch({
                 type: USER_UPDATE_PROFILE_FAIL,
