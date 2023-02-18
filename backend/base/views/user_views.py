@@ -66,13 +66,13 @@ def getUsers(request):
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
-@api_view(["GET"])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):
+    print(request.user)
     user = request.user
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
-
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])

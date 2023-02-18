@@ -17,18 +17,18 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'name', 'isAdmin']
 
-    def get__id(self, obj):
+    def get_id(self, obj):
         return obj.id
 
     def get_isAdmin(self, obj):
         return obj.is_staff
-    
+
     def get_name(self, obj):
         name = obj.first_name
         if name == '':
             name = obj.email
-        return name
 
+        return name
 
 
 class UserSerializerWithToken(UserSerializer):

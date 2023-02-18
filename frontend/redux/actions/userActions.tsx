@@ -90,7 +90,7 @@ export const register =
     };
 
 export const getUserDetails =
-    (id: string) => async (dispatch: any, getState: any) => {
+    (id: string) => async (dispatch: any, getState) => {
         try {
             dispatch({ type: USER_DETAILS_REQUEST });
 
@@ -100,12 +100,10 @@ export const getUserDetails =
 
             const config = {
                 headers: {
-                    "Content-type": "application/json",
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc5Mjg1MjIwLCJpYXQiOjE2NzY2NTYwNjgsImp0aSI6ImE1ODdiNzU1MjMxYjQ2NzlhOTQ0ZmQ3MmM4NDY5ZjAzIiwidXNlcl9pZCI6MX0.myaXN69eA_rBETXWpOItT163jT20Sg7qXS7PIbXfJrE`,
+                    // "Content-type": "application/json",
+                    Authorization: `Bearer ${userInfo.token}`,
                 },
             };
-
-            console.log(userInfo.token);
 
             const { data } = await axios.get(
                 `${url}/api/users/profile/`,

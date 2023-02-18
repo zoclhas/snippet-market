@@ -16,9 +16,7 @@ export const listProducts =
         try {
             dispatch({ type: PRODUCTS_LIST_REQUEST });
 
-            const { data } = await axios.get(
-                `${url}/api/products?query=${query}&page=${page}`
-            );
+            const { data } = await axios.get(`${url}/api/products/`);
 
             dispatch({
                 type: PRODUCTS_LIST_SUCCESS,
