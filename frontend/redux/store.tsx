@@ -8,6 +8,7 @@ import {
     userLoginReducer,
     userRegisterReducer,
     userDetailsReducer,
+    userUpdateProfileReducer,
 } from "./reducers/userReducers";
 
 let store;
@@ -18,6 +19,7 @@ const reducers = combineReducers({
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
+    userUpdateProfile: userUpdateProfileReducer,
 });
 
 function initStore(initialState) {

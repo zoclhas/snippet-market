@@ -27,9 +27,29 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# Email stuff
+
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = int(env('EMAIL_PORT'))
+EMAIL_USE_TLS = env('EMAIL_USE_TLS').lower() == 'true'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
+
 
 # Application definition
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 
 from datetime import timedelta
 SIMPLE_JWT = {
@@ -182,3 +202,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = [
+    'x-csrf-token'
+]
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','http://.127.0.0.1:8000']

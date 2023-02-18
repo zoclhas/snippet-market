@@ -24,7 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faIdBadge,
     faAt,
-    faRightToBracket,
+    faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { getUserDetails } from "@/redux/actions/userActions";
@@ -108,44 +108,48 @@ export default function Profile() {
                             <Space h={16} />
                         </>
                     )}
-                    <form onSubmit={updateUserHandler}>
-                        <Card withBorder shadow="xl" radius="lg">
-                            <TextInput
-                                icon={<FontAwesomeIcon icon={faIdBadge} />}
-                                placeholder="John Doe"
-                                radius="xl"
-                                variant="filled"
-                                required
-                                type="text"
-                                onChange={(e) => setName(e.target.value)}
-                                mb={16}
-                            />
-                            <TextInput
-                                icon={<FontAwesomeIcon icon={faAt} />}
-                                placeholder="johndoe@example.com"
-                                radius="xl"
-                                variant="filled"
-                                required
-                                type="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                mb={16}
-                            />
-                            <Card.Section mb={16}>
-                                <Divider />
-                            </Card.Section>
-                            <Button
-                                onClick={updateUserHandler}
-                                variant="light"
-                                radius="xl"
-                                style={{ width: "100%" }}
-                                type="submit"
-                                // loading={loading}
-                            >
-                                Register&nbsp;
-                                <FontAwesomeIcon icon={faRightToBracket} />
-                            </Button>
-                        </Card>
-                    </form>
+                    {user && (
+                        <form onSubmit={updateUserHandler}>
+                            <Card withBorder shadow="xl" radius="lg">
+                                <TextInput
+                                    icon={<FontAwesomeIcon icon={faIdBadge} />}
+                                    defaultValue={user.name}
+                                    placeholder="John Doe"
+                                    radius="xl"
+                                    variant="filled"
+                                    required
+                                    type="text"
+                                    onChange={(e) => setName(e.target.value)}
+                                    mb={16}
+                                />
+                                <TextInput
+                                    icon={<FontAwesomeIcon icon={faAt} />}
+                                    defaultValue={user.email}
+                                    placeholder="johndoe@example.com"
+                                    radius="xl"
+                                    variant="filled"
+                                    required
+                                    type="email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    mb={16}
+                                />
+                                <Card.Section mb={16}>
+                                    <Divider />
+                                </Card.Section>
+                                <Button
+                                    onClick={updateUserHandler}
+                                    variant="light"
+                                    radius="xl"
+                                    style={{ width: "100%" }}
+                                    type="submit"
+                                    loading={loading}
+                                >
+                                    Update&nbsp;
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                </Button>
+                            </Card>
+                        </form>
+                    )}
                 </div>
                 <div>
                     <Title size={22}>Orders</Title>

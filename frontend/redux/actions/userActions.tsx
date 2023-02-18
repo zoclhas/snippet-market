@@ -12,6 +12,11 @@ import {
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
     USER_DETAILS_FAIL,
+    //
+    USER_UPDATE_PROFILE_REQUEST,
+    USER_UPDATE_PROFILE_SUCCESS,
+    USER_UPDATE_PROFILE_FAIL,
+    USER_UPDATE_PROFILE_RESET,
 } from "@/redux/types/userTypes";
 const url = process.env.NEXT_PUBLIC_API_URL;
 
@@ -100,7 +105,7 @@ export const getUserDetails =
 
             const config = {
                 headers: {
-                    // "Content-type": "application/json",
+                    "Content-type": "application/json",
                     Authorization: `Bearer ${userInfo.token}`,
                 },
             };
@@ -112,11 +117,85 @@ export const getUserDetails =
 
             dispatch({
                 type: USER_DETAILS_SUCCESS,
-                paylod: data,
+                payload: data,
             });
         } catch (error) {
             dispatch({
                 type: USER_DETAILS_FAIL,
+                payload:
+                    error.response.data && error.response.data.detail
+                        ? error.response.data.detail
+                        : error.message,
+            });
+        }
+    };
+
+export const resetUserPassword =
+    (id: string) => async (dispatch: any, getState, getCookie) => {
+        try {
+            dispatch({ type: USER_DETAILS_REQUEST });
+
+            const {
+                userLogin: { userInfo },
+            } = getState();
+
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${userInfo.token}`,
+                },
+            };
+
+            // const { data } = await axios.get(`${url}/api/users/${id}/`, config);
+            const { data } = await axios.post(
+                `${url}/api/users/password-reset/`,
+                config
+            );
+
+            dispatch({
+                type: USER_DETAILS_SUCCESS,
+                payload: data,
+            });
+        } catch (error) {
+            dispatch({
+                type: USER_DETAILS_FAIL,
+                payload:
+                    error.response.data && error.response.data.detail
+                        ? error.response.data.detail
+                        : error.message,
+            });
+        }
+    };
+
+export const updateUserProfile =
+    (user: object) => async (dispatch: any, getState) => {
+        try {
+            dispatch({ type: USER_UPDATE_PROFILE_REQUEST });
+
+            const {
+                userLogin: { userInfo },
+            } = getState();
+
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${userInfo.token}`,
+                },
+            };
+
+            const { data } = await axios.get(
+                `${url}/api/users/profile/update/`,
+                user
+                // config,
+            );
+
+            dispatch({
+                type: USER_UPDATE_PROFILE_SUCCESS,
+                payload: data,
+            });
+        } catch (error) {
+            dispatch({
+                type: USER_UPDATE_PROFILE_FAIL,
                 payload:
                     error.response.data && error.response.data.detail
                         ? error.response.data.detail
