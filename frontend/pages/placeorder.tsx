@@ -89,15 +89,6 @@ export default function Cart() {
     const { cartItems } = cart;
     const shippingAddress = cart.shippingAddress;
 
-    cart.itemsPrice = cart.cartItems
-        .reduce((acc, item) => acc + item.price * item.qty, 0)
-        .toFixed(2);
-    cart.taxPrice = Number(0.05 * cart.itemsPrice).toFixed(2);
-
-    cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.taxPrice)).toFixed(
-        2
-    );
-
     const placeOrder = () => {
         // router.push("/login?redirect=shipping");
     };
@@ -241,7 +232,14 @@ export default function Cart() {
                                     <Text size="lg" mb={16}>
                                         <Group>
                                             <Text fw={800}>Subtotal:</Text>$
-                                            {cart.itemsPrice}
+                                            {cart.cartItems
+                                                .reduce(
+                                                    (acc, item) =>
+                                                        acc +
+                                                        item.price * item.qty,
+                                                    0
+                                                )
+                                                .toFixed(2)}
                                         </Group>
                                     </Text>
                                     <Card.Section>
@@ -250,7 +248,9 @@ export default function Cart() {
                                     <Text size="lg" mt={16} mb={16}>
                                         <Group>
                                             <Text fw={800}>VAT:</Text>$
-                                            {cart.taxPrice}
+                                            {Number(
+                                                0.05 * cart.itemsPrice
+                                            ).toFixed(2)}
                                         </Group>
                                     </Text>
                                     <Card.Section>
@@ -259,7 +259,10 @@ export default function Cart() {
                                     <Text size="lg" mt={16} mb={16}>
                                         <Group>
                                             <Text fw={800}>Total:</Text>$
-                                            {cart.totalPrice}
+                                            {(
+                                                Number(cart.itemsPrice) +
+                                                Number(cart.taxPrice)
+                                            ).toFixed(2)}
                                         </Group>
                                     </Text>
                                     <Card.Section>
