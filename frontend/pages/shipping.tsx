@@ -52,7 +52,7 @@ export default function Shipping() {
     const dispatch = useDispatch();
 
     const cart = useSelector((state: any) => state.cart);
-    const { shippingAddress } = cart.shippingAddress;
+    const shippingAddress = cart.shippingAddress;
 
     const [location, setLocation] = useState(
         shippingAddress?.location ? shippingAddress.location : ""
@@ -63,7 +63,7 @@ export default function Shipping() {
 
     const submitHandler = () => {
         dispatch(saveShippingAddress({ location, grade }) as any);
-        router.push("/order");
+        router.push("/placeorder");
     };
 
     return (
