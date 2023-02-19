@@ -1,0 +1,4 @@
+export const ORDER_CREATE_REQUEST: string = "ORDER_CREATE_REQUEST";
+export const ORDER_CREATE_SUCCESS: string = "ORDER_CREATE_SUCCESS";
+export const ORDER_CREATE_FAIL: string = "ORDER_CREATE_FAIL";
+export const ORDER_CREATE_RESET: string = "ORDER_CREATE_FAIL";

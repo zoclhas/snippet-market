@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     Container,
@@ -6,11 +6,9 @@ import {
     Title,
     createStyles,
     Space,
-    Loader,
     Card,
     Button,
     Group,
-    Image,
     Divider,
     Select,
     Anchor,

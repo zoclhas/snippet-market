@@ -159,14 +159,21 @@ export default function Product() {
                                                     product.count_in_stock <= 0
                                                 }
                                                 radius="lg"
-                                                data={Array(
-                                                    product.count_in_stock
-                                                )
-                                                    .fill(0)
-                                                    .map(
-                                                        (_, index) =>
-                                                            `${index + 1}`
-                                                    )}
+                                                data={
+                                                    product.count_in_stock > 0
+                                                        ? Array(
+                                                              product.count_in_stock
+                                                          )
+                                                              .fill(0)
+                                                              .map(
+                                                                  (_, index) =>
+                                                                      `${
+                                                                          index +
+                                                                          1
+                                                                      }`
+                                                              )
+                                                        : []
+                                                }
                                                 onChange={setQty}
                                             />
                                         </Group>

@@ -2,6 +2,7 @@ from django.urls import path
 from .views import views
 from .views import product_views as pv
 from .views import user_views as uv
+from .views import order_views as ov
 
 urlpatterns = [
     path("", views.getRoutes, name="get-routes"),
@@ -19,4 +20,7 @@ urlpatterns = [
     path("users/", uv.getUsers, name="get-users"),
     path("users/profile/", uv.getUserProfile, name="get-user-profile"),
     path("users/profile/update/", uv.updateUserProfile, name="update-user-profile"),
+
+    path("orders/add/", ov.addOrderItems, name="add-order"),
+    path("orders/<int:pk>/", ov.getOrderByID, name="user-order")
 ]

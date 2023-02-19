@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     Container,
@@ -6,13 +6,10 @@ import {
     Title,
     createStyles,
     Space,
-    Loader,
     Card,
     Button,
     Group,
-    Image,
     Divider,
-    Select,
     Anchor,
     SimpleGrid,
 } from "@mantine/core";
@@ -23,6 +20,9 @@ import { Message } from "@/components/message/message";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartArrowDown } from "@fortawesome/free-solid-svg-icons";
+
+import { createOrder } from "@/redux/actions/orderActions";
+import { ORDER_CREATE_RESET } from "@/redux/types/orderTypes";
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -82,19 +82,66 @@ export default function Cart() {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const productId = router.query["id"] as unknown as number;
-    const qty = router.query["qty"] as unknown as number;
-
     const cart = useSelector((state: any) => state.cart);
     const { cartItems } = cart;
     const shippingAddress = cart.shippingAddress;
 
+    const orderCreate = useSelector((state: any) => state.orderCreate);
+    const { loading, success, order, error } = orderCreate;
+
+    useEffect(() => {
+        if (success) {
+            router.push(`/order/${order.id}`);
+            dispatch({ type: ORDER_CREATE_RESET });
+        }
+    }, [success, router]);
+
     const placeOrder = () => {
-        // router.push("/login?redirect=shipping");
+        dispatch(
+            createOrder({
+                orderItems: cart.cartItems,
+                shippingAddress: cart.shippingAddress,
+                paymentMethod: "Cash on delivery",
+
+                itemsPrice: cart.cartItems
+                    .reduce((acc, item) => acc + item.price * item.qty, 0)
+                    .toFixed(2),
+
+                taxPrice: Number(
+                    0.05 *
+                        cart.cartItems
+                            .reduce(
+                                (acc, item) => acc + item.price * item.qty,
+                                0
+                            )
+                            .toFixed(2)
+                ).toFixed(2),
+
+                totalPrice: Number(
+                    parseFloat(
+                        cart.cartItems
+                            .reduce(
+                                (acc, item) => acc + item.price * item.qty,
+                                0
+                            )
+                            .toFixed(2)
+                    ) +
+                        0.05 *
+                            cart.cartItems.reduce(
+                                (acc, item) => acc + item.price * item.qty,
+                                0
+                            )
+                ).toFixed(2),
+            }) as any
+        );
     };
 
     useEffect(() => {
-        if (!shippingAddress) router.push("/shipping");
+        if (
+            shippingAddress.location === undefined ||
+            shippingAddress.grade === undefined
+        )
+            router.push("/shipping");
     }, [shippingAddress]);
 
     const url = process.env.NEXT_PUBLIC_API_URL;
@@ -198,7 +245,7 @@ export default function Cart() {
                                                                 }}
                                                             >
                                                                 {item.qty} X $
-                                                                {item.price}{" "}
+                                                                {item.price}
                                                                 =&nbsp;
                                                                 <Text fw={600}>
                                                                     $
@@ -249,7 +296,16 @@ export default function Cart() {
                                         <Group>
                                             <Text fw={800}>VAT:</Text>$
                                             {Number(
-                                                0.05 * cart.itemsPrice
+                                                0.05 *
+                                                    cart.cartItems
+                                                        .reduce(
+                                                            (acc, item) =>
+                                                                acc +
+                                                                item.price *
+                                                                    item.qty,
+                                                            0
+                                                        )
+                                                        .toFixed(2)
                                             ).toFixed(2)}
                                         </Group>
                                     </Text>
@@ -259,17 +315,43 @@ export default function Cart() {
                                     <Text size="lg" mt={16} mb={16}>
                                         <Group>
                                             <Text fw={800}>Total:</Text>$
-                                            {(
-                                                Number(cart.itemsPrice) +
-                                                Number(cart.taxPrice)
+                                            {Number(
+                                                parseFloat(
+                                                    cart.cartItems
+                                                        .reduce(
+                                                            (acc, item) =>
+                                                                acc +
+                                                                item.price *
+                                                                    item.qty,
+                                                            0
+                                                        )
+                                                        .toFixed(2)
+                                                ) +
+                                                    0.05 *
+                                                        cart.cartItems.reduce(
+                                                            (acc, item) =>
+                                                                acc +
+                                                                item.price *
+                                                                    item.qty,
+                                                            0
+                                                        )
                                             ).toFixed(2)}
                                         </Group>
                                     </Text>
-                                    <Card.Section>
+                                    <Card.Section mb={16}>
                                         <Divider />
                                     </Card.Section>
+                                    {error && (
+                                        <>
+                                            <Message title="Uh oh!" color="red">
+                                                {error}
+                                            </Message>
+                                            <Card.Section mt={16} mb={16}>
+                                                <Divider />
+                                            </Card.Section>
+                                        </>
+                                    )}
                                     <Button
-                                        mt={16}
                                         radius="lg"
                                         variant="light"
                                         disabled={cartItems.length === 0}
