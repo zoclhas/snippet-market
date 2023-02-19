@@ -6,3 +6,8 @@ export const ORDER_CREATE_RESET: string = "ORDER_CREATE_FAIL";
 export const ORDER_DETAILS_REQUEST: string = "ORDER_DETAILS_REQUEST";
 export const ORDER_DETAILS_SUCCESS: string = "ORDER_DETAILS_SUCCESS";
 export const ORDER_DETAILS_FAIL: string = "ORDER_DETAILS_FAIL";
+
+export const ORDER_LIST_MY_REQUEST: string = "ORDER_LIST_MY_REQUEST";
+export const ORDER_LIST_MY_SUCCESS: string = "ORDER_LIST_MY_SUCCESS";
+export const ORDER_LIST_MY_FAIL: string = "ORDER_LIST_MY_FAIL";
+export const ORDER_LIST_MY_RESET: string = "ORDER_LIST_MY_RESET";

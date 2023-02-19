@@ -7,6 +7,10 @@ import {
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
     ORDER_DETAILS_FAIL,
+    //
+    ORDER_LIST_MY_REQUEST,
+    ORDER_LIST_MY_SUCCESS,
+    ORDER_LIST_MY_FAIL,
 } from "@/redux/types/orderTypes";
 import { CART_CLEAR_ITEMS } from "@/redux/types/cartTypes";
 const url = process.env.NEXT_PUBLIC_API_URL;
@@ -86,3 +90,38 @@ export const getOrderDetails =
             });
         }
     };
+
+export const getMyOrders = () => async (dispatch: any, getState) => {
+    try {
+        dispatch({ type: ORDER_LIST_MY_REQUEST });
+
+        const {
+            userLogin: { userInfo },
+        } = getState();
+
+        const config = {
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${userInfo.token}`,
+            },
+        };
+
+        const { data } = await axios.get(
+            `${url}/api/orders/my-orders/`,
+            config
+        );
+
+        dispatch({
+            type: ORDER_LIST_MY_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ORDER_LIST_MY_FAIL,
+            payload:
+                error.response.data && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message,
+        });
+    }
+};

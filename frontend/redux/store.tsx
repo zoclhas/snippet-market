@@ -13,6 +13,7 @@ import {
 import {
     orderCreateReducer,
     orderDetailsReducer,
+    orderListMyReducer,
 } from "@/redux/reducers/orderReducers";
 
 let store;
@@ -26,6 +27,7 @@ const reducers = combineReducers({
     userUpdateProfile: userUpdateProfileReducer,
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
+    orderListMy: orderListMyReducer,
 });
 
 function initStore(initialState) {

@@ -18,6 +18,7 @@ import {
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_FAIL,
 } from "@/redux/types/userTypes";
+import { ORDER_LIST_MY_RESET } from "@/redux/types/orderTypes";
 const url = process.env.NEXT_PUBLIC_API_URL;
 
 export const login =
@@ -58,6 +59,7 @@ export const logout = () => (dispatch: any) => {
     localStorage.removeItem("userInfo");
     dispatch({ type: USER_LOGOUT });
     dispatch({ type: USER_DETAILS_RESET });
+    dispatch({ type: ORDER_LIST_MY_RESET });
 };
 
 export const register =

@@ -10,6 +10,8 @@ import {
     Anchor,
     Button,
     Space,
+    Table,
+    ScrollArea,
     createStyles,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -28,8 +30,9 @@ import {
 
 import { getUserDetails, updateUserProfile } from "@/redux/actions/userActions";
 import { USER_UPDATE_PROFILE_RESET } from "@/redux/types/userTypes";
+import { getMyOrders } from "@/redux/actions/orderActions";
 
-const useStyles = createStyles({
+const useStyles = createStyles((theme) => ({
     wrapper: {
         minHeight: "90vh",
         maxWidth: "1300px",
@@ -41,13 +44,17 @@ const useStyles = createStyles({
         display: "grid",
         gridTemplateColumns: "0.4fr 1fr",
         gap: "1rem",
+
+        [theme.fn.smallerThan("sm")]: {
+            gridTemplateColumns: "1fr",
+        },
     },
 
     bottom_links: {
         display: "flex",
         justifyContent: "space-between",
     },
-});
+}));
 
 export default function Profile() {
     const { classes } = useStyles();
@@ -56,15 +63,6 @@ export default function Profile() {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-
-    const form = useForm({
-        initialValues: {
-            email: "",
-        },
-        validate: {
-            email: (value) => !/^\S+@\S+$/.test(value),
-        },
-    });
 
     const userDetails = useSelector((state: any) => state.userDetails);
     const { loading, user, error } = userDetails;
@@ -77,18 +75,23 @@ export default function Profile() {
     );
     const { success, error: updateError } = userUpdateProfile;
 
+    const orderListMy = useSelector((state: any) => state.orderListMy);
+    const { loading: loadingOrders, orders, error: errorOrders } = orderListMy;
+
     useEffect(() => {
         if (!userInfo) {
             router.push("/login");
         } else {
-            if (!user || !user.name || success) {
+            if (!user || !user.name || success || userInfo.id !== user.id) {
                 dispatch({ type: USER_UPDATE_PROFILE_RESET });
                 dispatch(getUserDetails("profile") as any);
+                dispatch(getMyOrders() as any);
+            } else {
                 setName(userInfo.name);
                 setEmail(userInfo.email);
             }
         }
-    }, [dispatch, userInfo, user, success]);
+    }, [dispatch, userInfo, user, success, orders]);
 
     const updateUserHandler = () => {
         dispatch(
@@ -215,7 +218,78 @@ export default function Profile() {
                         )}
                     </div>
                     <div>
-                        <Title size={22}>Orders</Title>
+                        <Title size={22} mb={16}>
+                            My Orders
+                        </Title>
+                        {loadingOrders ? (
+                            <>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <Loader variant="bars" />
+                                </div>
+                                <Space h={16} />
+                            </>
+                        ) : errorOrders ? (
+                            <Message title="Uh oh!" color="red">
+                                {errorOrders}
+                            </Message>
+                        ) : (
+                            <ScrollArea>
+                                <Table
+                                    striped
+                                    highlightOnHover
+                                    verticalSpacing="xs"
+                                    withBorder
+                                    sx={{
+                                        tableLayout: "fixed",
+                                    }}
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Created</th>
+                                            <th>Total</th>
+                                            <th>Paid</th>
+                                            <th>Delivered</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {orders &&
+                                            orders.map((order) => (
+                                                <tr>
+                                                    <td>#{order.id}</td>
+                                                    <td>
+                                                        {order.created_at.substring(
+                                                            0,
+                                                            10
+                                                        )}
+                                                    </td>
+                                                    <td>
+                                                        ${order.total_price}
+                                                    </td>
+                                                    <td>{order.id}</td>
+                                                    <td>{order.id}</td>
+                                                    <td>
+                                                        <Button
+                                                            variant="light"
+                                                            radius="lg"
+                                                            component={Link}
+                                                            href={`/order/${order.id}`}
+                                                        >
+                                                            Check Order
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                    </tbody>
+                                </Table>
+                            </ScrollArea>
+                        )}
                     </div>
                 </div>
             </Container>

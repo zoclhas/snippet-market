@@ -22,5 +22,6 @@ urlpatterns = [
     path("users/profile/update/", uv.updateUserProfile, name="update-user-profile"),
 
     path("orders/add/", ov.addOrderItems, name="add-order"),
-    path("orders/<int:pk>/", ov.getOrderByID, name="user-order")
+    path("orders/<int:pk>/", ov.getOrderByID, name="user-order"),
+    path("orders/my-orders/", ov.getMyOrders, name="my-orders"),
 ]

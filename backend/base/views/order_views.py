@@ -67,3 +67,11 @@ def getOrderByID(request, pk):
             return Response({"detail": "Not authorized to view this order."}, status = status.HTTP_401_UNAUTHORIZED)
     except:
         return Response({"detail": "Order doesn't exist."}, status = status.HTTP_404_NOT_FOUND)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getMyOrders(request):
+    user = request.user
+    orders = user.order_set.all()
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
