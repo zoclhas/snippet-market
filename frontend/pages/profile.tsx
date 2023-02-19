@@ -275,8 +275,20 @@ export default function Profile() {
                                                             $
                                                             {order?.total_price}
                                                         </td>
-                                                        <td>{order?.id}</td>
-                                                        <td>{order?.id}</td>
+                                                        <td>
+                                                            {order.is_paid ? (
+                                                                <b>Yes</b>
+                                                            ) : (
+                                                                "No"
+                                                            )}
+                                                        </td>
+                                                        <td>
+                                                            {order.is_delivered ? (
+                                                                <b>Yes</b>
+                                                            ) : (
+                                                                "No"
+                                                            )}
+                                                        </td>
                                                         <td>
                                                             <Button
                                                                 variant="light"
