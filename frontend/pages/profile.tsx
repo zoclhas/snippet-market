@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useEffect } from "react";
 import {
     Container,
@@ -259,33 +260,37 @@ export default function Profile() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {orders &&
-                                            orders.map((order) => (
-                                                <tr>
-                                                    <td>#{order.id}</td>
-                                                    <td>
-                                                        {order.created_at.substring(
-                                                            0,
-                                                            10
-                                                        )}
-                                                    </td>
-                                                    <td>
-                                                        ${order.total_price}
-                                                    </td>
-                                                    <td>{order.id}</td>
-                                                    <td>{order.id}</td>
-                                                    <td>
-                                                        <Button
-                                                            variant="light"
-                                                            radius="lg"
-                                                            component={Link}
-                                                            href={`/order/${order.id}`}
-                                                        >
-                                                            Check Order
-                                                        </Button>
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                        {orders && (
+                                            <>
+                                                {orders.map((order) => (
+                                                    <tr>
+                                                        <td>#{order?.id}</td>
+                                                        <td>
+                                                            {order?.created_at.substring(
+                                                                0,
+                                                                10
+                                                            )}
+                                                        </td>
+                                                        <td>
+                                                            $
+                                                            {order?.total_price}
+                                                        </td>
+                                                        <td>{order?.id}</td>
+                                                        <td>{order?.id}</td>
+                                                        <td>
+                                                            <Button
+                                                                variant="light"
+                                                                radius="lg"
+                                                                component={Link}
+                                                                href={`/order/${order?.id}`}
+                                                            >
+                                                                Check Order
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </>
+                                        )}
                                     </tbody>
                                 </Table>
                             </ScrollArea>

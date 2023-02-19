@@ -150,7 +150,7 @@ export default function Register() {
                 if (localStorage.getItem("userInfo")) location.reload();
             }, 1500);
         } else {
-            setPasswordErr("Passwords don't match.");
+            setPasswordErr("Passwords do not match.");
         }
     };
 
