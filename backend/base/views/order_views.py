@@ -47,13 +47,13 @@ def addOrderItems(request):
                 image = product.image.url,
             )
 
-            product.count_in_stock -= item.qty
+            product.count_in_stock -= int(item.qty)
             product.save()
 
     serializer = OrderSerializer(order, many=False)
     return Response(serializer.data)
 
-@api_view(["POST"])
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getOrderByID(request, pk):
     user = request.user

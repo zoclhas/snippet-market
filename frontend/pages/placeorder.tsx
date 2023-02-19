@@ -87,7 +87,7 @@ export default function Cart() {
     const shippingAddress = cart.shippingAddress;
 
     const orderCreate = useSelector((state: any) => state.orderCreate);
-    const { loading, success, order, error } = orderCreate;
+    const { success, order, error } = orderCreate;
 
     useEffect(() => {
         if (success) {
@@ -149,7 +149,7 @@ export default function Cart() {
     return (
         <>
             <Head>
-                <title>Snippet | Cart</title>
+                <title>Snippet | Place Order</title>
             </Head>
             <Container className={classes.wrapper}>
                 <Title>Place Order</Title>
