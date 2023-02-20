@@ -75,3 +75,22 @@ def getMyOrders(request):
     orders = user.order_set.all()
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def cancelOrder(request, pk):
+    user = request.user
+
+    try:
+        order = Order.objects.get(id=pk)
+        if user.is_staff or order.user == user:
+            data = bool(request.data["cancelled"])
+            order.cancelled = data
+            order.save()
+
+            serializer = OrderSerializer(order, many=False)
+            return Response(serializer.data)
+        else:
+            return Response({"detail": "Not authorized to cancel this order."}, status = status.HTTP_401_UNAUTHORIZED)
+    except:
+        return Response({"detail": "Order doesn't exist."}, status = status.HTTP_404_NOT_FOUND)
