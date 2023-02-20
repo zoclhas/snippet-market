@@ -92,5 +92,6 @@ def cancelOrder(request, pk):
             return Response(serializer.data)
         else:
             return Response({"detail": "Not authorized to cancel this order."}, status = status.HTTP_401_UNAUTHORIZED)
-    except:
+    except Exception as e:
+        print(e)
         return Response({"detail": "Order doesn't exist."}, status = status.HTTP_404_NOT_FOUND)
