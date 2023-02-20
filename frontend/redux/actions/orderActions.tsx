@@ -11,6 +11,10 @@ import {
     ORDER_LIST_MY_REQUEST,
     ORDER_LIST_MY_SUCCESS,
     ORDER_LIST_MY_FAIL,
+    //
+    ORDER_CANCEL_REQUEST,
+    ORDER_CANCEL_SUCCESS,
+    ORDER_CANCEL_FAIL,
 } from "@/redux/types/orderTypes";
 import { CART_CLEAR_ITEMS } from "@/redux/types/cartTypes";
 const url = process.env.NEXT_PUBLIC_API_URL;
@@ -118,6 +122,50 @@ export const getMyOrders = () => async (dispatch: any, getState) => {
     } catch (error) {
         dispatch({
             type: ORDER_LIST_MY_FAIL,
+            payload:
+                error.response.data && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message,
+        });
+    }
+};
+
+export const cancelOrder = (id: number) => async (dispatch: any, getState) => {
+    try {
+        dispatch({ type: ORDER_CANCEL_REQUEST });
+
+        const {
+            userLogin: { userInfo },
+        } = getState();
+
+        const formData = new FormData();
+        formData.append("cancelled", "True");
+
+        const config = {
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${userInfo.token}`,
+            },
+        };
+
+        const { data } = await axios.put(
+            `${url}/api/orders/cancel/${id}/`,
+            formData,
+            config
+        );
+
+        dispatch({
+            type: ORDER_CANCEL_SUCCESS,
+            payload: data,
+        });
+
+        dispatch({
+            type: ORDER_DETAILS_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ORDER_CANCEL_FAIL,
             payload:
                 error.response.data && error.response.data.detail
                     ? error.response.data.detail

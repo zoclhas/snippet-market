@@ -9,11 +9,9 @@ import {
     Loader,
     Card,
     Button,
-    Group,
-    Image,
     Divider,
-    Select,
     Anchor,
+    Modal,
     SimpleGrid,
 } from "@mantine/core";
 import Link from "next/link";
@@ -22,9 +20,9 @@ import { useRouter } from "next/router";
 import { Message } from "@/components/message/message";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightLong, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faBan } from "@fortawesome/free-solid-svg-icons";
 
-import { getOrderDetails } from "@/redux/actions/orderActions";
+import { getOrderDetails, cancelOrder } from "@/redux/actions/orderActions";
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -80,6 +78,12 @@ const useStyles = createStyles((theme) => ({
     checkout: {
         height: "max-content",
     },
+
+    modal_footer: {
+        display: "flex",
+        gap: "1rem",
+        justifyContent: "flex-end",
+    },
 }));
 
 export default function Order() {
@@ -87,11 +91,20 @@ export default function Order() {
     const router = useRouter();
     const dispatch = useDispatch();
 
+    const [cancelOrderModal, setCancelOrderModal] = useState<boolean>(false);
+
     const userLogin = useSelector((state: any) => state.userLogin);
     const { userInfo } = userLogin;
 
     const orderDetails = useSelector((state: any) => state.orderDetails);
     const { loading, order, error } = orderDetails;
+
+    const orderCancel = useSelector((state: any) => state.orderCancel);
+    const {
+        loading: loadingCancel,
+        order: orderCancelled,
+        error: errorCancel,
+    } = orderCancel;
 
     const orderId = parseInt(router.asPath.split("/")[2]);
 
@@ -102,9 +115,27 @@ export default function Order() {
 
         if (!order || order.id !== orderId)
             dispatch(getOrderDetails(orderId) as any);
-    }, [dispatch, order, orderId]);
+    }, [dispatch, order, orderId, orderCancelled]);
 
     const url = process.env.NEXT_PUBLIC_API_URL;
+
+    const confirmCancelOrder = (id: number) => {
+        dispatch(cancelOrder(id) as any);
+    };
+
+    var today: any = new Date();
+    var dd = today.getDate();
+
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = "0" + dd;
+    }
+
+    if (mm < 10) {
+        mm = "0" + mm;
+    }
+    today = yyyy + "-" + mm + "-" + dd;
 
     return (
         <>
@@ -126,25 +157,18 @@ export default function Order() {
                     </>
                 ) : (
                     <>
-                        {order.orderItems.length === 0 ? (
-                            <Message title="Cart is empty!" color="red">
-                                Please add items to your cart.
-                                <Anchor component={Link} href="/products">
-                                    Go back
-                                </Anchor>
-                            </Message>
-                        ) : (
-                            <div className={classes.order_content}>
-                                <SimpleGrid
-                                    cols={3}
-                                    mt={16}
-                                    breakpoints={[
-                                        { maxWidth: "xs", cols: 1 },
-                                        { maxWidth: "sm", cols: 2 },
-                                    ]}
-                                >
-                                    {order &&
-                                        order.orderItems.map((item) => (
+                        <div className={classes.order_content}>
+                            <SimpleGrid
+                                cols={3}
+                                mt={16}
+                                breakpoints={[
+                                    { maxWidth: "xs", cols: 1 },
+                                    { maxWidth: "sm", cols: 2 },
+                                ]}
+                            >
+                                {order && (
+                                    <>
+                                        {order.orderItems.map((item) => (
                                             <Card
                                                 key={item.id}
                                                 shadow="xl"
@@ -170,7 +194,9 @@ export default function Order() {
                                                     />
                                                 </Card.Section>
                                                 <Text
-                                                    style={{ display: "flex" }}
+                                                    style={{
+                                                        display: "flex",
+                                                    }}
                                                 >
                                                     <Text fw={800}>
                                                         Price:{" "}
@@ -184,89 +210,219 @@ export default function Order() {
                                                 </Text>
                                             </Card>
                                         ))}
-                                </SimpleGrid>
-                                <div>
-                                    <Card
-                                        shadow="xl"
-                                        radius="lg"
-                                        withBorder
-                                        mt={16}
-                                    >
-                                        <Title size={22} mb={16}>
-                                            Order Summary
-                                        </Title>
-                                        <Card.Section mb={16}>
-                                            <Divider />
-                                        </Card.Section>
-                                        <Text
-                                            style={{ display: "flex" }}
-                                            mb={16}
-                                        >
-                                            <Text fw={800}>
-                                                Payment Method:
+                                    </>
+                                )}
+                            </SimpleGrid>
+                            <div>
+                                <Card
+                                    shadow="xl"
+                                    radius="lg"
+                                    withBorder
+                                    mt={16}
+                                >
+                                    <Title size={22} mb={16}>
+                                        Order Summary
+                                    </Title>
+                                    {!order.cancelled ? (
+                                        <>
+                                            <Card.Section mb={16}>
+                                                <Divider />
+                                            </Card.Section>
+                                            <Text
+                                                style={{ display: "flex" }}
+                                                mb={16}
+                                            >
+                                                <Text fw={800}>
+                                                    Payment Method:
+                                                </Text>
+                                                {order?.payment_method}
                                             </Text>
-                                            {order?.payment_method}
-                                        </Text>
-                                        <Card.Section mb={16}>
-                                            <Divider />
-                                        </Card.Section>
-                                        <Text
-                                            style={{ display: "flex" }}
-                                            mb={16}
-                                        >
-                                            <Text fw={800}>Delivery ETA: </Text>
-                                            {order?.delivery_eta
-                                                ? order?.delivery_eta
-                                                : "Will be updated soon"}
-                                        </Text>
-                                        <Card.Section mb={16}>
-                                            <Divider />
-                                        </Card.Section>
-                                        <Text
-                                            style={{ display: "flex" }}
-                                            mb={16}
-                                        >
-                                            <Text fw={800}>Delivered: </Text>
-                                            &nbsp;
-                                            {order?.is_delivered ? "Yes" : "No"}
-                                        </Text>
-                                        <Card.Section mb={16}>
-                                            <Divider />
-                                        </Card.Section>
-                                        <Text
-                                            style={{ display: "flex" }}
-                                            mb={16}
-                                        >
-                                            <Text fw={800}>Delivered At: </Text>
-                                            &nbsp;
-                                            {order?.delivered_at
-                                                ? order?.delivered_at
-                                                : "Not yet delivered"}
-                                        </Text>
-                                        <Card.Section mb={16}>
-                                            <Divider />
-                                        </Card.Section>
-                                        <Text
-                                            style={{ display: "flex" }}
-                                            mb={16}
-                                        >
-                                            <Text fw={800}>Total Price: </Text>
-                                            &nbsp; ${order?.total_price}
-                                        </Text>
-                                        <Card.Section mb={16}>
-                                            <Divider />
-                                        </Card.Section>
-                                        <Text style={{ display: "flex" }}>
-                                            <Text fw={800}>Paid: </Text>&nbsp;
-                                            {order?.is_paid ? "Yes" : "No"}
-                                        </Text>
-                                    </Card>
-                                </div>
+                                            <Card.Section mb={16}>
+                                                <Divider />
+                                            </Card.Section>
+                                            <Text
+                                                style={{ display: "flex" }}
+                                                mb={16}
+                                            >
+                                                <Text fw={800}>
+                                                    Delivery ETA:{" "}
+                                                </Text>
+                                                {order?.delivery_eta
+                                                    ? `${order?.delivery_eta
+                                                          .split("T")[0]
+                                                          .substring(
+                                                              0,
+                                                              10
+                                                          )}; ${order?.delivery_eta
+                                                          .split("T")[1]
+                                                          .substring(0, 5)}`
+                                                    : "Will be updated soon"}
+                                            </Text>
+                                            <Card.Section mb={16}>
+                                                <Divider />
+                                            </Card.Section>
+                                            <Text
+                                                style={{ display: "flex" }}
+                                                mb={16}
+                                            >
+                                                <Text fw={800}>
+                                                    Delivered:{" "}
+                                                </Text>
+                                                &nbsp;
+                                                {order?.is_delivered
+                                                    ? "Yes"
+                                                    : "No"}
+                                            </Text>
+                                            <Card.Section mb={16}>
+                                                <Divider />
+                                            </Card.Section>
+                                            <Text
+                                                style={{ display: "flex" }}
+                                                mb={16}
+                                            >
+                                                <Text fw={800}>
+                                                    Delivered At:{" "}
+                                                </Text>
+                                                &nbsp;
+                                                {order?.delivered_at
+                                                    ? order?.delivered_at
+                                                    : "Not yet delivered"}
+                                            </Text>
+                                            <Card.Section mb={16}>
+                                                <Divider />
+                                            </Card.Section>
+                                            <Text
+                                                style={{ display: "flex" }}
+                                                mb={16}
+                                            >
+                                                <Text fw={800}>
+                                                    Total Price:{" "}
+                                                </Text>
+                                                &nbsp; ${order?.total_price}
+                                            </Text>
+                                            <Card.Section mb={16}>
+                                                <Divider />
+                                            </Card.Section>
+                                            <Text
+                                                style={{ display: "flex" }}
+                                                mb={16}
+                                            >
+                                                <Text fw={800}>Paid: </Text>
+                                                &nbsp;
+                                                {order?.is_paid ? "Yes" : "No"}
+                                            </Text>
+
+                                            {!order.cancelled ||
+                                            today !==
+                                                order?.delivery_eta
+                                                    .split("T")[0]
+                                                    .substring(0, 10) ? (
+                                                <>
+                                                    <Card.Section mb={16}>
+                                                        <Divider />
+                                                    </Card.Section>
+                                                    {errorCancel && (
+                                                        <>
+                                                            <Message
+                                                                title="Uh oh!"
+                                                                color="yellow"
+                                                            >
+                                                                {errorCancel}
+                                                            </Message>
+                                                            <Card.Section
+                                                                mt={16}
+                                                                mb={16}
+                                                            >
+                                                                <Divider />
+                                                            </Card.Section>
+                                                        </>
+                                                    )}
+                                                    <Button
+                                                        color="yellow"
+                                                        variant="light"
+                                                        radius="lg"
+                                                        style={{
+                                                            width: "100%",
+                                                        }}
+                                                        onClick={() =>
+                                                            setCancelOrderModal(
+                                                                true
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            order.cancelled
+                                                        }
+                                                        loading={loadingCancel}
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faBan}
+                                                        />
+                                                        &nbsp;Cancel Order?
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Card.Section mb={16}>
+                                                        <Divider />
+                                                    </Card.Section>
+                                                    <Text>
+                                                        Order has already been
+                                                        cancelled or can't
+                                                        cancel anymore.
+                                                    </Text>
+                                                </>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Card.Section mb={16}>
+                                                <Divider />
+                                            </Card.Section>
+                                            <Text>
+                                                Order has been cancelled.
+                                            </Text>
+                                        </>
+                                    )}
+                                </Card>
                             </div>
-                        )}
+                        </div>
                     </>
                 )}
             </Container>
+            {order && (
+                <Modal
+                    opened={cancelOrderModal}
+                    onClose={() => setCancelOrderModal(false)}
+                    centered
+                    overlayBlur={3}
+                    title="Are you sure you want to cancel your order?"
+                    radius="lg"
+                >
+                    <div className={classes.modal_footer}>
+                        <Button
+                            variant="default"
+                            radius="lg"
+                            onClick={() => setCancelOrderModal(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            color="yellow"
+                            variant="light"
+                            radius="lg"
+                            onClick={() => {
+                                confirmCancelOrder(order?.id);
+                                setCancelOrderModal(false);
+                            }}
+                            disabled={order.cancelled}
+                            loading={loadingCancel}
+                        >
+                            <FontAwesomeIcon icon={faBan} />
+                            &nbsp;Cancel Order
+                        </Button>
+                    </div>
+                </Modal>
+            )}
         </>
     );
 }

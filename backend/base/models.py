@@ -52,7 +52,7 @@ class Order(models.Model):
     cancelled = models.BooleanField(default=False)
 
     def __str__(self):
-        return "Created by " + str(self.user) + " at " + str(self.created_at)
+        return f"Order #{self.id} | Created_by {str(self.user)} at {str(self.created_at)[0:-13]} | Cancelled: {self.cancelled}"
     
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)

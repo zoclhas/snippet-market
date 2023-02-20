@@ -11,3 +11,7 @@ export const ORDER_LIST_MY_REQUEST: string = "ORDER_LIST_MY_REQUEST";
 export const ORDER_LIST_MY_SUCCESS: string = "ORDER_LIST_MY_SUCCESS";
 export const ORDER_LIST_MY_FAIL: string = "ORDER_LIST_MY_FAIL";
 export const ORDER_LIST_MY_RESET: string = "ORDER_LIST_MY_RESET";
+
+export const ORDER_CANCEL_REQUEST: string = "ORDER_CANCEL_REQUEST";
+export const ORDER_CANCEL_SUCCESS: string = "ORDER_CANCEL_SUCCESS";
+export const ORDER_CANCEL_FAIL: string = "ORDER_CANCEL_FAIL";

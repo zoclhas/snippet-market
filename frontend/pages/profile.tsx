@@ -263,43 +263,58 @@ export default function Profile() {
                                         {orders && (
                                             <>
                                                 {orders.map((order) => (
-                                                    <tr>
-                                                        <td>#{order?.id}</td>
-                                                        <td>
-                                                            {order?.created_at.substring(
-                                                                0,
-                                                                10
-                                                            )}
-                                                        </td>
-                                                        <td>
-                                                            $
-                                                            {order?.total_price}
-                                                        </td>
-                                                        <td>
-                                                            {order.is_paid ? (
-                                                                <b>Yes</b>
-                                                            ) : (
-                                                                "No"
-                                                            )}
-                                                        </td>
-                                                        <td>
-                                                            {order.is_delivered ? (
-                                                                <b>Yes</b>
-                                                            ) : (
-                                                                "No"
-                                                            )}
-                                                        </td>
-                                                        <td>
-                                                            <Button
-                                                                variant="light"
-                                                                radius="lg"
-                                                                component={Link}
-                                                                href={`/order/${order?.id}`}
-                                                            >
-                                                                Check Order
-                                                            </Button>
-                                                        </td>
-                                                    </tr>
+                                                    <>
+                                                        {!order.cancelled && (
+                                                            <tr>
+                                                                <td>
+                                                                    #{order?.id}
+                                                                </td>
+                                                                <td>
+                                                                    {order?.created_at.substring(
+                                                                        0,
+                                                                        10
+                                                                    )}
+                                                                </td>
+                                                                <td>
+                                                                    $
+                                                                    {
+                                                                        order?.total_price
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    {order.is_paid ? (
+                                                                        <b>
+                                                                            Yes
+                                                                        </b>
+                                                                    ) : (
+                                                                        "No"
+                                                                    )}
+                                                                </td>
+                                                                <td>
+                                                                    {order.is_delivered ? (
+                                                                        <b>
+                                                                            Yes
+                                                                        </b>
+                                                                    ) : (
+                                                                        "No"
+                                                                    )}
+                                                                </td>
+                                                                <td>
+                                                                    <Button
+                                                                        variant="light"
+                                                                        radius="lg"
+                                                                        component={
+                                                                            Link
+                                                                        }
+                                                                        href={`/order/${order?.id}`}
+                                                                    >
+                                                                        Check
+                                                                        Order
+                                                                    </Button>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                    </>
                                                 ))}
                                             </>
                                         )}

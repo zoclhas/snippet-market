@@ -14,6 +14,7 @@ import {
     orderCreateReducer,
     orderDetailsReducer,
     orderListMyReducer,
+    orderCancelReducuer,
 } from "@/redux/reducers/orderReducers";
 
 let store;
@@ -28,6 +29,7 @@ const reducers = combineReducers({
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderListMy: orderListMyReducer,
+    orderCancel: orderCancelReducuer,
 });
 
 function initStore(initialState) {

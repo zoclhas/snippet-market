@@ -12,6 +12,10 @@ import {
     ORDER_LIST_MY_SUCCESS,
     ORDER_LIST_MY_FAIL,
     ORDER_LIST_MY_RESET,
+    //
+    ORDER_CANCEL_REQUEST,
+    ORDER_CANCEL_SUCCESS,
+    ORDER_CANCEL_FAIL,
 } from "@/redux/types/orderTypes";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -92,6 +96,31 @@ export const orderListMyReducer = (state = { orders: [] }, action) => {
         case ORDER_LIST_MY_RESET:
             return {
                 orders: [],
+            };
+
+        default:
+            return state;
+    }
+};
+
+export const orderCancelReducuer = (state = {}, action) => {
+    switch (action.type) {
+        case ORDER_CANCEL_REQUEST:
+            return {
+                loading: true,
+            };
+
+        case ORDER_CANCEL_SUCCESS:
+            return {
+                loading: false,
+                success: true,
+                order: action.payload,
+            };
+
+        case ORDER_CANCEL_FAIL:
+            return {
+                loading: false,
+                error: action.payload,
             };
 
         default:
