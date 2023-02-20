@@ -84,9 +84,15 @@ def cancelOrder(request, pk):
     try:
         order = Order.objects.get(id=pk)
         if user.is_staff or order.user == user:
-            data = bool(request.data["cancelled"])
-            order.cancelled = data
+            order.cancelled = True
             order.save()
+
+            order_items = request.data[1]
+
+            for i in order_items:
+                product = Product.objects.get(id=i["product"])
+                product.count_in_stock += int(i["qty"])
+                product.save()
 
             serializer = OrderSerializer(order, many=False)
             return Response(serializer.data)

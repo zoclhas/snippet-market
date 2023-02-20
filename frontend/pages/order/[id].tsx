@@ -102,6 +102,7 @@ export default function Order() {
     const orderCancel = useSelector((state: any) => state.orderCancel);
     const {
         loading: loadingCancel,
+        success,
         order: orderCancelled,
         error: errorCancel,
     } = orderCancel;
@@ -115,12 +116,12 @@ export default function Order() {
 
         if (!order || order.id !== orderId)
             dispatch(getOrderDetails(orderId) as any);
-    }, [dispatch, order, orderId, orderCancelled]);
+    }, [dispatch, order, orderId, success]);
 
     const url = process.env.NEXT_PUBLIC_API_URL;
 
-    const confirmCancelOrder = (id: number) => {
-        dispatch(cancelOrder(id) as any);
+    const confirmCancelOrder = (order: object) => {
+        dispatch(cancelOrder(order) as any);
     };
 
     var today: any = new Date();
@@ -411,7 +412,13 @@ export default function Order() {
                             variant="light"
                             radius="lg"
                             onClick={() => {
-                                confirmCancelOrder(order?.id);
+                                confirmCancelOrder(
+                                    [
+                                        {
+                                            id: orderId,
+                                        },
+                                    ].concat([order.orderItems])
+                                );
                                 setCancelOrderModal(false);
                             }}
                             disabled={order.cancelled}

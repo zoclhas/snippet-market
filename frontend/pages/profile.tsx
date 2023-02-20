@@ -77,7 +77,12 @@ export default function Profile() {
     const { success, error: updateError } = userUpdateProfile;
 
     const orderListMy = useSelector((state: any) => state.orderListMy);
-    const { loading: loadingOrders, orders, error: errorOrders } = orderListMy;
+    const {
+        loading: loadingOrders,
+        success: successOrders,
+        orders,
+        error: errorOrders,
+    } = orderListMy;
 
     useEffect(() => {
         if (!userInfo) {
@@ -92,7 +97,7 @@ export default function Profile() {
                 setEmail(userInfo.email);
             }
         }
-    }, [dispatch, userInfo, user, success, orders]);
+    }, [dispatch, userInfo, user, success, successOrders]);
 
     const updateUserHandler = () => {
         dispatch(
